@@ -1,0 +1,129 @@
+{% extends 'root.html' %}
+{% block content %}
+<section class="content">
+  <h1 class="page-header text-center title"><b>University Election</b></h1>
+  
+  <div class="vote-container">
+    <h3>Position 1</h3>
+    <div class="vote-content">
+      <div class="">
+        <input type="radio" name="position_1" value="candidate_1">
+      </div>
+      <div>
+        <img src="" alt="profile">
+      </div>
+      <h5>Moses Omondi</h5>
+    </div>
+    <div class="vote-content">
+      <div class="">
+        <input type="radio" name="position_1" value="candidate_2">
+      </div>
+      <div>
+        <img src="" alt="profile">
+      </div>
+      <h5>Another Candidate</h5>
+    </div>
+    <div class="vote-content">
+      <div class="">
+        <input type="radio" name="position_1" value="candidate_3">
+      </div>
+      <div>
+        <img src="" alt="profile">
+      </div>
+      <h5>Yet Another Candidate</h5>
+    </div>
+  </div>
+  
+  <div class="vote-container">
+    <h3>Position 2</h3>
+    <div class="vote-content">
+      <div class="">
+        <input type="radio" name="position_2" value="candidate_4">
+      </div>
+      <div>
+        <img src="" alt="profile">
+      </div>
+      <h5>Another Candidate</h5>
+    </div>
+    <div class="vote-content">
+      <div class="">
+        <input type="radio" name="position_2" value="candidate_5">
+      </div>
+      <div>
+        <img src="" alt="profile">
+      </div>
+      <h5>Yet Another Candidate</h5>
+    </div>
+    <div class="vote-content">
+      <div class="">
+        <input type="radio" name="position_2" value="candidate_6">
+      </div>
+      <div>
+        <img src="" alt="profile">
+      </div>
+      <h5>Yet Another Candidate</h5>
+    </div>
+  </div>
+  
+  <div class="vote-container">
+    <h3>Position 3</h3>
+    <div class="vote-content">
+      <div class="">
+        <input type="radio" name="position_3" value="candidate_7">
+      </div>
+      <div>
+        <img src="" alt="profile">
+      </div>
+      <h5>Moses Omondi</h5>
+    </div>
+    <div class="vote-content">
+      <div class="">
+        <input type="radio" name="position_3" value="candidate_8">
+      </div>
+      <div>
+        <img src="" alt="profile">
+      </div>
+      <h5>Another Candidate</h5>
+    </div>
+    <div class="vote-content">
+      <div class="">
+        <input type="radio" name="position_3" value="candidate_9">
+      </div>
+      <div>
+        <img src="" alt="profile">
+      </div>
+      <h5>Yet Another Candidate</h5>
+    </div>
+  </div>
+  <form method="POST" id="ballotForm" action="">
+    <div class="text-center">
+      <button type="button" class="btn btn-success btn-flat" id="preview"><i
+        class="fa fa-file-text"></i> Preview</button>
+      <button type="submit" class="btn btn-primary btn-flat" name="submit_vote"><i
+                class="fa fa-check-square-o"></i> Submit</button>
+    </div>
+  </form>
+  
+</section>
+{% endblock content %}
+
+
+
+<!-- Preview -->
+<!--<div class="modal fade" id="preview_modal">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Vote Preview</h4>
+          </div>
+          <div class="modal-body">
+            <div id="preview_body"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-flat pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+          </div>
+      </div>
+  </div>
+</div>-->

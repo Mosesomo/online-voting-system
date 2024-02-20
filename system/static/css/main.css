@@ -1,0 +1,64 @@
+.login-box-body{
+    max-width: 400px;
+    width: 100%;
+    margin: 30px auto;
+    border-radius: 10px;
+}
+
+.form-group legend{
+    text-align: center;
+    font-size: 1.4em;
+    font-weight: 600;
+}
+.login-box-body .form-group{
+    font-size: 1.1em;
+}
+
+.form-group .form-control{
+    border-radius: 7px;
+}
+
+.form-group .form-control-label{
+    font-size: 1.1em;
+    font-weight: 500;
+}
+
+.row  .btn{
+    font-size: 1.3em;
+    border-radius: 5px;
+}
+
+.content{
+    margin-top: 40px;
+}
+
+.vote-container{
+    max-width: 600px;
+    width: 100%;
+    margin: 30px auto;
+    background-color: #fff;
+    padding: 20px;
+}
+.vote-container h3{
+    border-bottom: 1px solid gray;
+    font-weight: 700;
+    color: blue;
+}
+
+.vote-content{
+    padding: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    font-size: 1.3em;
+}
+
+.main-header{
+    position: fixed;
+    width: 100%;
+}
+
+.main-sidebar{
+    position: fixed;
+}
