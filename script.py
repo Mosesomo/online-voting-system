@@ -1,20 +1,22 @@
-from system import app, db
+from system import app, db, bcrypt
 from system.model import User, Candidate, Position, BallotPosition
 
 with app.app_context():
     db.create_all()
     
-    """admin_user = User.query.filter_by(first_name='admin').first()
+    hashed_password = (bcrypt.generate_password_hash
+                           ('password')
+                           .decode('utf-8'))
+    admin_user = User.query.filter_by(first_name='admin').first()
     if not admin_user:
         user = User(
             first_name='admin',
             last_name='user',
             email='admin@example.com',
             is_admin=True,
-            password='password'
+            password=hashed_password
             )
-        db.session.add(user)""" # Use db.session.add() instead of db.add_all()
-        
+        db.session.add(user) # Use db.session.add() instead of db.add_all()
     """user = User(
         first_name='Anne',
         last_name='Njeri',

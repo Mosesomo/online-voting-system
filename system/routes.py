@@ -1,22 +1,53 @@
-from flask import render_template, url_for
+from flask import render_template, url_for, redirect, flash
 from itertools import groupby
-from system import app
+from system import app, bcrypt, db
 from system.form import LoginForm, RegistrationForm
 from system.model import User, Candidate, BallotPosition, Position
-from collections import defaultdict
+from flask_login import login_user, logout_user, current_user, login_required
 
-@app.route('/')
-@app.route('/account/')
-@app.route('/account/login')
+
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/account/', methods=['GET', 'POST'])
+@app.route('/account/login', methods=['GET', 'POST'])
 def login_home():
+    if current_user.is_authenticated:
+        return redirect(url_for('ballot'))
+
     form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password,
+                                               form.password.data):
+            login_user(user)
+            return redirect(url_for('ballot'))
+        else:
+            flash('Login Unsuccessfull, please check email or password', 'danger')
     return render_template('login.html', form=form)
 
-@app.route('/account/register')
+@app.route('/account/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('ballot'))
     form = RegistrationForm()
+    if form.validate_on_submit():
+        hashed_password = (bcrypt.generate_password_hash
+                           (form.password.data)
+                           .decode('utf-8'))
+        user = User(
+            first_name=form.first_name.data,
+            last_name=form.last_name.data,
+            email=form.email.data,
+            password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        flash('Registered successfully', 'success')
+        return redirect(url_for('login_home'))
     return render_template('register.html', form=form)
 
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login_home'))
 
 @app.route('/ballot')
 def ballot():
