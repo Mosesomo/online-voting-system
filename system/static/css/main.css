@@ -54,6 +54,10 @@
     font-size: 1.3em;
 }
 
+.vote-content h4{
+    font-weight: 500;
+}
+
 .main-header{
     position: fixed;
     width: 100%;
@@ -61,4 +65,9 @@
 
 .main-sidebar{
     position: fixed;
+}
+
+.vote-container .img-circle{
+    width: 50px;
+    height: 50px;
 }

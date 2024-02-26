@@ -11,29 +11,22 @@
         <div class="box-body">
           <table id="example1" class="table table-bordered table-hover table-striped">
             <thead style="background-color: #222D32; color:white;">
+                  <th>ID</th>
                   <th>Firstname</th>
                   <th>Lastname</th>
                   <th>Email</th>
-                  <th>Phone</th>
-                  <th>Action</th>
             </thead>
-            <!--<tbody>
+            <tbody>
               {% for voter in voters %}
-                
                 <tr>
-                  <td>{{ voter.admin.first_name }}</td>
-                  <td>{{ voter.admin.last_name }}</td>
-                  <td>{{ voter.admin.email }}</td>
-                  <td>{{ voter.phone }}</td>
-                  
-                  <td>
-                    <button class='btn btn-primary btn-sm edit btn-flat' data-id='{{ voter.id }}'><i class='fa fa-edit'></i> Edit</button>
-                    <button class='btn btn-danger btn-sm delete btn-flat' data-id='{{ voter.id }}'><i class='fa fa-trash'></i> Delete</button>
-                  </td>
+                  <td>{{ voter.id }}</td>
+                  <td>{{ voter.first_name }}</td>
+                  <td>{{ voter.last_name }}</td>
+                  <td>{{ voter.email }}</td>
                 </tr>
               {% endfor %}      
 
-            </tbody>-->
+            </tbody>
           </table>
         </div>
       </div>
