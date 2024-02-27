@@ -9,8 +9,8 @@
 
 .form-group legend{
     text-align: center;
-    font-size: 1.4em;
-    font-weight: 600;
+    font-size: 1.8em;
+    font-weight: 700;
 }
 .login-box-body .form-group{
     font-size: 1.1em;
@@ -21,13 +21,14 @@
 }
 
 .form-group .form-control-label{
-    font-size: 1.1em;
+    font-size: 1.3em;
     font-weight: 500;
 }
 
-.row  .btn{
+.col  .btn{
     font-size: 1.3em;
     border-radius: 5px;
+    margin-bottom: 10px;
 }
 
 .content{
@@ -54,6 +55,10 @@
     align-items: center;
     width: 100%;
     font-size: 1.3em;
+}
+
+.vote-content h4{
+    font-weight: 500;
 }
 
 .main-header{

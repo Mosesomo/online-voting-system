@@ -1,63 +1,64 @@
 {% extends 'root.html' %}
 {% block content %}
-<section class="content">
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="box">
-        <div class="box-body">
-          <table id="example1" class="table table-bordered table-hover table-striped">
-              <thead style="background-color: #222D32; color:white;">
-                  <th>Position</th>
-                  <th>Candidates</th>
-                  <th>votes</th>
-              </thead>
-              <tbody>
-                  <tr>
-                    <td rowspan=3>President</td>
-                    <td>Moses Omondi</td>
-                    <td>34</td>
-                  </tr>
-                  <tr>
-                    <td>Moses Omondi</td>
-                    <td>34</td>
-                  </tr>
-                  <tr>
-                    <td>Moses Omondi</td>
-                    <td>34</td>
-                  </tr>
-                  <tr>
-                    <td rowspan=3>Academics</td>
-                    <td>Moses Omondi</td>
-                    <td>34</td>
-                  </tr>
-                  <tr>
-                    <td>Moses Omondi</td>
-                    <td>34</td>
-                  </tr>
-                  <tr>
-                    <td>Moses Omondi</td>
-                    <td>34</td>
-                  </tr>
-                  <tr>
-                    <td rowspan=3>Secretary</td>
-                    <td>Moses Omondi</td>
-                    <td>34</td>
-                  </tr>
-                  <tr>
-                    <td>Moses Omondi</td>
-                    <td>34</td>
-                  </tr>
-                  <tr>
-                    <td>Moses Omondi</td>
-                    <td>34</td>
-                  </tr>
-            </tbody>
-          </table>
+{% if current_user.is_admin %}
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-body">
+            <table id="example1" class="table table-bordered table-hover table-striped">
+                <thead style="background-color: #222D32; color:white;">
+                    <th>Position</th>
+                    <th>Candidates</th>
+                    <th>votes</th>
+                </thead>
+                <tbody>
+                    <tr>
+                      <td rowspan=3>President</td>
+                      <td>Moses Omondi</td>
+                      <td>34</td>
+                    </tr>
+                    <tr>
+                      <td>Moses Omondi</td>
+                      <td>34</td>
+                    </tr>
+                    <tr>
+                      <td>Moses Omondi</td>
+                      <td>34</td>
+                    </tr>
+                    <tr>
+                      <td rowspan=3>Academics</td>
+                      <td>Moses Omondi</td>
+                      <td>34</td>
+                    </tr>
+                    <tr>
+                      <td>Moses Omondi</td>
+                      <td>34</td>
+                    </tr>
+                    <tr>
+                      <td>Moses Omondi</td>
+                      <td>34</td>
+                    </tr>
+                    <tr>
+                      <td rowspan=3>Secretary</td>
+                      <td>Moses Omondi</td>
+                      <td>34</td>
+                    </tr>
+                    <tr>
+                      <td>Moses Omondi</td>
+                      <td>34</td>
+                    </tr>
+                    <tr>
+                      <td>Moses Omondi</td>
+                      <td>34</td>
+                    </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-
+  </section>
+{% endif %}
 {% endblock content %}
 

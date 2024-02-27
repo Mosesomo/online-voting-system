@@ -1,74 +1,82 @@
 {% extends 'root.html' %}
 {% block content %}
-<section class="content">
-  <h1 class="page-header text-center title"><b>University Election</b></h1>
-  
-  <div class="vote-container">
-    <h3>President</h3>
-    <div class="vote-content">
-      <div>
-        <img src="" alt="profile">
+{% if current_user.is_admin %}
+  <section class="content">
+    <h1 class="page-header text-center title"><b>University Election</b></h1>
+    
+    {% for position, candidates in grouped_candidates.items() %}
+      <div class="vote-container">
+      
+        <h3>{{ position.position_name }}</h3>
+        {% for candidate in candidates %}
+          <div class="vote-content">
+            <div>
+              <img src="{{url_for('static', filename='images/userplaceholder.png')}}" class="img-circle" alt="User Image">
+            </div>
+            <h4>{{ candidate.first_name }}  {{candidate.last_name}}</h4>
+          </div>
+        {% endfor %}
       </div>
-      <h5>Moses Omondi</h5>
-    </div>
-    <div class="vote-content">
-      <div>
-        <img src="" alt="profile">
+    {% endfor %}
+      
+      <!--<div class="vote-content">
+        <div>
+          <img src="" alt="profile">
+        </div>
+        <h5>Another Candidate</h5>
       </div>
-      <h5>Another Candidate</h5>
-    </div>
-    <div class="vote-content">
-      <div>
-        <img src="" alt="profile">
+      <div class="vote-content">
+        <div>
+          <img src="" alt="profile">
+        </div>
+        <h5>Yet Another Candidate</h5>
       </div>
-      <h5>Yet Another Candidate</h5>
     </div>
-  </div>
-  
-  <div class="vote-container">
-    <h3>Secretary</h3>
-    <div class="vote-content">
-      <div>
-        <img src="" alt="profile">
+    
+    <div class="vote-container">
+      <h3>Secretary</h3>
+      <div class="vote-content">
+        <div>
+          <img src="" alt="profile">
+        </div>
+        <h5>Another Candidate</h5>
       </div>
-      <h5>Another Candidate</h5>
-    </div>
-    <div class="vote-content">
-      <div>
-        <img src="" alt="profile">
+      <div class="vote-content">
+        <div>
+          <img src="" alt="profile">
+        </div>
+        <h5>Yet Another Candidate</h5>
       </div>
-      <h5>Yet Another Candidate</h5>
-    </div>
-    <div class="vote-content">
-      <div>
-        <img src="" alt="profile">
+      <div class="vote-content">
+        <div>
+          <img src="" alt="profile">
+        </div>
+        <h5>Yet Another Candidate</h5>
       </div>
-      <h5>Yet Another Candidate</h5>
     </div>
-  </div>
-  
-  <div class="vote-container">
-    <h3>Academics</h3>
-    <div class="vote-content">
-      <div>
-        <img src="" alt="profile">
+    
+    <div class="vote-container">
+      <h3>Academics</h3>
+      <div class="vote-content">
+        <div>
+          <img src="" alt="profile">
+        </div>
+        <h5>Moses Omondi</h5>
       </div>
-      <h5>Moses Omondi</h5>
-    </div>
-    <div class="vote-content">
-      <div>
-        <img src="" alt="profile">
+      <div class="vote-content">
+        <div>
+          <img src="" alt="profile">
+        </div>
+        <h5>Another Candidate</h5>
       </div>
-      <h5>Another Candidate</h5>
-    </div>
-    <div class="vote-content">
-      <div>
-        <img src="" alt="profile">
+      <div class="vote-content">
+        <div>
+          <img src="" alt="profile">
+        </div>
+        <h5>Yet Another Candidate</h5>
       </div>
-      <h5>Yet Another Candidate</h5>
-    </div>
-  </div>
-</section>
-
+    </div>-->
+  </section>
+{% endif %}
 {% endblock content %}
 

@@ -7,42 +7,23 @@
         </div>
 
         <div class="login-box-body">
-            <!-- <p class="login-box-msg">Register an account</p> -->
             <form action=" " method="POST">
                 {{ form.hidden_tag() }}
                     <fieldset class="form-group">
                         <legend class="border-bottom mb-4">Register</legend>
                         <div class="form-group">
                             {{ form.first_name.label(class="form-control-label") }}
-                            {% if form.first_name.errors %}
-                                {{ form.first_name(class="form-control form-control-lg is-invalid") }}
-                                <div class="invalid-feedback">
-                                    {% for error in form.first_name.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                {{ form.first_name(class="form-control form-control-lg") }}
-                            {% endif %}
+                            {{ form.first_name(class="form-control form-control-lg") }}
                         </div>
                         <div class="form-group">
                             {{ form.last_name.label(class="form-control-label") }}
-                            {% if form.last_name.errors %}
-                                {{ form.last_name(class="form-control form-control-lg is-invalid") }}
-                                <div class="invalid-feedback">
-                                    {% for error in form.last_name.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                {{ form.last_name(class="form-control form-control-lg") }}
-                            {% endif %}
+                            {{ form.last_name(class="form-control form-control-lg") }}
                         </div>
                         <div class="form-group">
                             {{ form.email.label(class="form-control-label") }}
                             {% if form.email.errors %}
                                 {{ form.email(class="form-control form-control-lg is-invalid") }}
-                                <div class="invalid-feedback">
+                                <div class="invalid-feedback d-block">
                                     {% for error in form.email.errors %}
                                         <span>{{ error }}</span>
                                     {% endfor %}
@@ -55,7 +36,7 @@
                             {{ form.password.label(class="form-control-label") }}
                             {% if form.password.errors %}
                                 {{ form.password(class="form-control form-control-lg is-invalid") }}
-                                <div class="invalid-feedback">
+                                <div class="invalid-feedback d-block">
                                     {% for error in form.password.errors %}
                                         <span>{{ error }}</span>
                                     {% endfor %}
@@ -68,7 +49,7 @@
                             {{ form.confirm_password.label(class="form-control-label") }}
                             {% if form.confirm_password.errors %}
                                 {{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
-                                <div class="invalid-feedback">
+                                <div class="invalid-feedback d-block">
                                     {% for error in form.confirm_password.errors %}
                                         <span>{{ error }}</span>
                                     {% endfor %}
@@ -78,7 +59,7 @@
                             {% endif %}
                         </div>
                     </fieldset>
-                    <div class="row">
+                    <div class="col">
                         <div class="col-xs-6">
                             {{ form.submit(class="btn btn-primary btn-block btn-flat") }}
                         </div>
@@ -87,6 +68,8 @@
                         </div>
                     </div>
                 </div>
+                        </div>
+                    </div>
             </form>
         </div>
     </div>

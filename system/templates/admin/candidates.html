@@ -1,43 +1,46 @@
 {% extends 'root.html' %}
 {% block content %}
-<section class="content">
-  <div class="row">
-      <div class="col-xs-12">
-        <div class="box">
-          <div class="box-header with-border">
-            <a href="#addnew" data-toggle="modal" class="btn btn-success btn-sm btn-flat"><i
-                    class="fa fa-plus"></i> Add New</a>
-          </div>
-          <div class="box-body">
-            <table id="example1" class="table table-bordered table-hover table-striped">
-              <thead style="background-color: #222D32; color:white;">
-                    <th>Full Name</th>
-                    <th>Position</th>
-                    <th>Bio</th>
-                    <th>Avatar</th>
-                    <th>Action</th>
-                </thead>
-                <!--<tbody>
-                  {% for candidate in candidates %}
-                    <tr>
-                      <td>{{ candidate.fullname }}</td>
-                      <td>{{ candidate.position }}</td>
-                      <td>{{ candidate.bio }}</td>
-                      <td><img src="/media/{{ candidate.photo }}" width="80" height="80" alt="{{ candidate.fullname }}'s Avatar" class="img img-fluid"></td>
-                      
-                      <td>
-                        <button class='btn btn-primary btn-sm edit btn-flat' data-id='{{ candidate.id }}'><i class='fa fa-edit'></i> Edit</button>
-                        <button class='btn btn-danger btn-sm delete btn-flat' data-id='{{ candidate.id }}'><i class='fa fa-trash'></i> Delete</button>
-                      </td>
-                    </tr>
-                  {% endfor %}      
+{% if current_user.is_admin %}
+  <section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header with-border">
+              <a href="#addnew" data-toggle="modal" class="btn btn-success btn-sm btn-flat"><i
+                      class="fa fa-plus"></i> Add New</a>
+            </div>
+            <div class="box-body">
+              <table id="example1" class="table table-bordered table-hover table-striped">
+                <thead style="background-color: #222D32; color:white;">
+                      <th>ID</th>
+                      <th>Full Name</th>
+                      <th>Position</th>
+                      <th>Bio</th>
+                      <th>Avatar</th>
+                      <th>Action</th>
+                  </thead>
+                  <tbody>
+                    {% for candidate in candidates %}
+                      <tr>
+                        <td>{{ candidate.id }}</td>
+                        <td>{{ candidate.first_name }} {{candidate.last_name}}</td>
+                        <td>{{ candidate.position.position_name }}</td>
+                        <td>{{ candidate.bio }}</td>
+                        <td><img src="{{url_for('static', filename='images/userplaceholder.png')}}" width="80" height="80" alt="{{ candidate.fullname }}'s Avatar" class="img img-fluid"></td>
+                        
+                        <!--<td>
+                          <button class='btn btn-primary btn-sm edit btn-flat' data-id='{{ candidate.id }}'><i class='fa fa-edit'></i> Edit</button>
+                          <button class='btn btn-danger btn-sm delete btn-flat' data-id='{{ candidate.id }}'><i class='fa fa-trash'></i> Delete</button>
+                        </td>-->
+                      </tr>
+                    {% endfor %}      
 
-                </tbody>-->
-            </table>
+                  </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
-  </div>
-</section>
-
+    </div>
+  </section>
+{% endif %}
 {% endblock content %}
