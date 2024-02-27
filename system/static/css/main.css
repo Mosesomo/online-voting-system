@@ -1,8 +1,10 @@
+
 .login-box-body{
     max-width: 400px;
     width: 100%;
     margin: 30px auto;
     border-radius: 10px;
+    background: linear-gradient(#e66465, #9198e5);
 }
 
 .form-group legend{
