@@ -1,7 +1,9 @@
-from flask import render_template, url_for, redirect, flash
+from flask import render_template, url_for, redirect, flash, request
 from itertools import groupby
+from wtforms import RadioField
+from wtforms.validators import DataRequired
 from system import app, bcrypt, db
-from system.form import LoginForm, RegistrationForm
+from system.form import LoginForm, RegistrationForm, BallotForm
 from system.model import User, Candidate, BallotPosition, Position
 from flask_login import login_user, logout_user, current_user, login_required
 
@@ -49,7 +51,7 @@ def logout():
     logout_user()
     return redirect(url_for('login_home'))
 
-@app.route('/ballot')
+@app.route('/ballot', methods=['GET', 'POST'])
 @login_required
 def ballot():
     # Query candidates grouped by position
@@ -59,8 +61,12 @@ def ballot():
     for position in positions:
         candidates = Candidate.query.filter_by(position=position).all()
         grouped_candidates[position] = candidates
+        
+    form = BallotForm()
 
-    return render_template('ballot.html', grouped_candidates=grouped_candidates)
+    return render_template('ballot.html',
+                           grouped_candidates=grouped_candidates,
+                           form=form)
 
 @app.route('/dashboard/positions')
 @login_required

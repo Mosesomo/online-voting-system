@@ -4,7 +4,7 @@ from system.model import User, Candidate, Position, BallotPosition
 with app.app_context():
     db.create_all()
     
-    hashed_password = (bcrypt.generate_password_hash
+    """hashed_password = (bcrypt.generate_password_hash
                            ('password')
                            .decode('utf-8'))
     admin_user = User.query.filter_by(first_name='admin').first()
@@ -16,7 +16,7 @@ with app.app_context():
             is_admin=True,
             password=hashed_password
             )
-        db.session.add(user) # Use db.session.add() instead of db.add_all()
+        db.session.add(user)""" # Use db.session.add() instead of db.add_all()
     """user = User(
         first_name='Anne',
         last_name='Njeri',
@@ -129,29 +129,27 @@ with app.app_context():
     
     db.session.add(candidate9)"""
     
-    """current_user = User.query.filter_by(email=email).first()
-    if current_user:
-        ballot = BallotPosition(
-            user_id=current_user.id,
-            position_id = 1,
-            candidate_id = 1
-        )
-        db.session.add(ballot)"""
+    """ballot = BallotPosition(
+        user_id=2,
+        position_id = 1,
+        candidate_id = 1
+    )
+    db.session.add(ballot)"""
     
     db.session.commit() # Use db.session.commit() instead of db.commit()
     
     users = User.query.all()
     for user in users:
         print(user)
-        
+    print('\n')  
     positions = Position.query.all()
     for position in positions:
         print(position)
-    
+    print("\n")
     candidates = Candidate.query.all()
     for candidate in candidates:
         print(candidate)
-        
+    print("\n")   
     ballots = BallotPosition.query.all()
     for ballot in ballots:
         print(ballot)

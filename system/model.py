@@ -16,7 +16,7 @@ class User(db.Model, UserMixin):
     is_admin = db.Column(db.Boolean, default=False)  # Add a field to distinguish between voters and admins
     
     # Relationship to retrieve user's votes (for voters)
-    votes = db.relationship('BallotPosition', backref='voter', lazy=True)
+    votes = db.relationship('BallotPosition', lazy=True, viewonly=True)
     
     def __repr__(self):
         return (
@@ -39,8 +39,8 @@ class Candidate(db.Model):
     position_id = db.Column(db.Integer, db.ForeignKey('position.id'))
 
     # Relationships
-    votes = db.relationship('BallotPosition', backref='ballot_votes', lazy=True)
-    position = db.relationship('Position', backref='candidate_position', lazy=True)
+    votes = db.relationship('BallotPosition', back_populates='candidate', lazy=True)
+    position = db.relationship('Position', back_populates='candidates')
     
     def __repr__(self):
         return (
@@ -59,7 +59,9 @@ class Position(db.Model):
     position_name = db.Column(db.String(40), unique=True)
 
     # Relationship
-    candidates = db.relationship('Candidate', backref='candidate_position', lazy=True)
+    candidates = db.relationship('Candidate', back_populates='position')
+    # Change back_populates to 'votes' to match BallotPosition model
+    votes = db.relationship('BallotPosition', back_populates='position', lazy=True)
     
     def __repr__(self):
         return (
@@ -73,16 +75,17 @@ class BallotPosition(db.Model):
     position_id = db.Column(db.Integer, db.ForeignKey('position.id'))
 
     # Relationships
-    user = db.relationship('User', backref='ballot_positions', lazy=True)
-    candidate = db.relationship('Candidate', backref='ballot_votes', lazy=True)
-    position = db.relationship('Position', backref='votes', lazy=True)
+    user = db.relationship('User', back_populates='votes', lazy=True)
+    # Add back_populates to the relationships
+    candidate = db.relationship('Candidate', back_populates='votes')
+    position = db.relationship('Position', back_populates='votes')
     
     def __repr__(self):
         return (
-            f"{self.id}",
-            f"{self.candidate_id}",
-            f"{self.user_id}",
-            f"{self.position_id}",
-            f"{self.candidate}",
-            f"{self.position}"
+            f"BallotPosition(id={self.id}, "
+            f"candidate_id={self.candidate_id}, "
+            f"user_id={self.user_id}, "
+            f"position_id={self.position_id}, "
+            f"candidate={self.candidate}, "
+            f"position={self.position})"
         )
