@@ -35,10 +35,10 @@ class Candidate(db.Model):
     phone = db.Column(db.String(16))
     candidate_img = db.Column(db.String(255), nullable=False, default="default.jpg")
     bio = db.Column(db.Text)
-
-    # Relationships
-    votes = db.relationship('BallotPosition', back_populates='candidate', lazy=True)
+    position_id = db.Column(db.Integer, db.ForeignKey('position.id'))
     position = db.relationship('Position', back_populates='candidates')
+    votes = db.relationship('BallotPosition', back_populates='candidate', lazy=True)
+
 
     def __repr__(self):
         return (
@@ -49,19 +49,16 @@ class Candidate(db.Model):
             f"phone={self.phone}, "
             f"candidate_img={self.candidate_img}, "
             f"bio={self.bio}, "
-            f"position={self.position.position_name}"
+            f"position={self.position.position_name},"
+            f"position_id={self.position.position_id},"
+            f"votes={self.position.votes}"
         )
-
-    def __repr__(self):
-        return f"[({self.name}), ({self.emai}), ({self.phone}), ({self.candidte_img}), ({self.bio}), ({self.position_id}), ({self.votes}), ({self.position})]"
 
 
 class Position(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     position_name = db.Column(db.String(40), unique=True)
-    # Relationship
     candidates = db.relationship('Candidate', back_populates='position')
-    # Change back_populates to 'votes' to match BallotPosition model
     votes = db.relationship('BallotPosition', back_populates='position', lazy=True)
 
     def __repr__(self):
