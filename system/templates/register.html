@@ -13,29 +13,29 @@
                     <fieldset class="form-group">
                         <legend class="border-bottom mb-4">Register</legend>
                         <div class="form-group">
-                            {{ form.firstName.label(class="form-control-label") }}
-                            {% if form.firstName.errors %}
-                                {{ form.firstName(class="form-control form-control-lg is-invalid") }}
+                            {{ form.first_name.label(class="form-control-label") }}
+                            {% if form.first_name.errors %}
+                                {{ form.first_name(class="form-control form-control-lg is-invalid") }}
                                 <div class="invalid-feedback">
-                                    {% for error in form.firstName.errors %}
+                                    {% for error in form.first_name.errors %}
                                         <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                             {% else %}
-                                {{ form.firstName(class="form-control form-control-lg") }}
+                                {{ form.first_name(class="form-control form-control-lg") }}
                             {% endif %}
                         </div>
                         <div class="form-group">
-                            {{ form.lastName.label(class="form-control-label") }}
-                            {% if form.lastName.errors %}
-                                {{ form.lastName(class="form-control form-control-lg is-invalid") }}
+                            {{ form.last_name.label(class="form-control-label") }}
+                            {% if form.last_name.errors %}
+                                {{ form.last_name(class="form-control form-control-lg is-invalid") }}
                                 <div class="invalid-feedback">
-                                    {% for error in form.lastName.errors %}
+                                    {% for error in form.last_name.errors %}
                                         <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                             {% else %}
-                                {{ form.lastName(class="form-control form-control-lg") }}
+                                {{ form.last_name(class="form-control form-control-lg") }}
                             {% endif %}
                         </div>
                         <div class="form-group">
@@ -85,9 +85,9 @@
                         <div class="pull-right col-xs-6">
                             <a  class="btn btn-success btn-block btn-flat" href="{{url_for('login_home')}}"> Log In</a>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </form>
         </div>
     </div>
-{% endblock content %} 
+{% endblock content %}

@@ -32,6 +32,10 @@
   	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
   	<style>
+      .login-page{
+        background-color: grey;
+        background: radial-gradient(#e66465, #9198e5);
+      }
   		.mt20{
         margin-top: 20px;
       }
@@ -46,8 +50,8 @@
         list-style-type:none;
       }
 
-      #candidate_list ul li{ 
-        margin:0 30px 30px 0; 
+      #candidate_list ul li{
+        margin:0 30px 30px 0;
         vertical-align:top
       }
 
@@ -62,11 +66,11 @@
       .votelist{
         font-size: 17px;
       }
-  	</style>		
+  	</style>
 </head>
 <body class="hold-transition login-page">
   {% block content %}
-    
+
   {% endblock content %}
     <!-- jQuery 3 -->
 <script src="{{ url_for('static', filename='bower_components/jquery/dist/jquery.min.js') }}"></script>
