@@ -1,37 +1,38 @@
 {% extends 'root.html' %}
 {% block content %}
-<section class="content">
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="box">
-        <div class="box-header with-border">
-          <a href="#addnew" data-toggle="modal" class="btn btn-success btn-sm btn-flat"><i
-                  class="fa fa-plus"></i> Add New</a>
-        </div>
-        <div class="box-body">
-          <table id="example1" class="table table-bordered table-hover table-striped">
-            <thead style="background-color: #222D32; color:white;">
-                  <th>ID</th>
-                  <th>Firstname</th>
-                  <th>Lastname</th>
-                  <th>Email</th>
-            </thead>
-            <tbody>
-              {% for voter in voters %}
-                <tr>
-                  <td>{{ voter.id }}</td>
-                  <td>{{ voter.first_name }}</td>
-                  <td>{{ voter.last_name }}</td>
-                  <td>{{ voter.email }}</td>
-                </tr>
-              {% endfor %}      
+{% if current_user.is_admin %}
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header with-border">
+            <a href="#addnew" data-toggle="modal" class="btn btn-success btn-sm btn-flat"><i
+                    class="fa fa-plus"></i> Add New</a>
+          </div>
+          <div class="box-body">
+            <table id="example1" class="table table-bordered table-hover table-striped">
+              <thead style="background-color: #222D32; color:white;">
+                    <th>ID</th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Email</th>
+              </thead>
+              <tbody>
+                {% for voter in voters %}
+                  <tr>
+                    <td>{{ voter.id }}</td>
+                    <td>{{ voter.first_name }}</td>
+                    <td>{{ voter.last_name }}</td>
+                    <td>{{ voter.email }}</td>
+                  </tr>
+                {% endfor %}      
 
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-
+  </section>
+{% endif %}
 {% endblock content %}

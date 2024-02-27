@@ -50,6 +50,7 @@ def logout():
     return redirect(url_for('login_home'))
 
 @app.route('/ballot')
+@login_required
 def ballot():
     # Query candidates grouped by position
     grouped_candidates = {}
@@ -62,22 +63,26 @@ def ballot():
     return render_template('ballot.html', grouped_candidates=grouped_candidates)
 
 @app.route('/dashboard/positions')
+@login_required
 def positions():
     positions = Position.query.all()
     return render_template('admin/positions.html', positions=positions)
 
 
 @app.route('/dashboard/candidates')
+@login_required
 def candidates():
     candidates = Candidate.query.all()
     return render_template('admin/candidates.html', candidates=candidates)
 
 @app.route('/dashboard/voters')
+@login_required
 def voters():
     voters = User.query.all()
     return render_template('admin/voters.html', voters=voters)
 
 @app.route('/ballot_positions')
+@login_required
 def ballot_positions():
     grouped_candidates = {}
     positions = Position.query.all()
@@ -91,11 +96,13 @@ def ballot_positions():
                            grouped_candidates=grouped_candidates)
 
 @app.route('/dashboard/votes')
+@login_required
 def votes():
     return render_template('admin/votes.html')
 
 
 @app.route('/dashboard')
+@login_required
 def home():
     positions = Position.query.all()
     candidates = Candidate.query.all()

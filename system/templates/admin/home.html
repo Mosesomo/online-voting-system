@@ -1,95 +1,96 @@
 {% extends 'root.html' %}
 {% block content %}
 <!-- Main content -->
-    <section class="content">
-      <div class="row">
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-aqua">
-            <div class="inner">
-              <h3>{{count_position}}</h3>
-              <p>No. of Positions</p>
-            </div>
-            <div class="icon">
-              <i class="fa fa-tasks"></i>
-            </div>
-            <a href="{{url_for('positions')}}" class="small-box-footer">More Info <i class="fa fa-arrow-circle-right"></i></a>
+{% if current_user.is_admin %}
+  <section class="content">
+    <div class="row">
+      <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-aqua">
+          <div class="inner">
+            <h3>{{count_position}}</h3>
+            <p>No. of Positions</p>
           </div>
+          <div class="icon">
+            <i class="fa fa-tasks"></i>
+          </div>
+          <a href="{{url_for('positions')}}" class="small-box-footer">More Info <i class="fa fa-arrow-circle-right"></i></a>
         </div>
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-green">
-            <div class="inner">
-              <h3>{{count_candidates}}</h3>          
-              <p>No. of Candidates</p>
-            </div>
-            <div class="icon">
-              <i class="fa fa-black-tie"></i>
-            </div>
-            <a href="{{url_for('candidates')}}" class="small-box-footer">More Info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-blue">
-            <div class="inner">
-              <h3>{{count_voters}}</h3>             
-              <p>Total Voters</p>
-            </div>
-            <div class="icon">
-              <i class="fa fa-users"></i>
-            </div>
-            <a href="{{url_for('voters')}}" class="small-box-footer">More Info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-maroon">
-            <div class="inner">
-              <h3>201</h3>
-              <p>Voters Voted</p>
-            </div>
-            <div class="icon">
-              <i class="fa fa-edit"></i>
-            </div>
-            <a href="{{url_for('votes')}}" class="small-box-footer">More Info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
-        <h2 style="font-style: bold; margin: 20px;">Results</h2>
-          <div class="col-xs-12">
-            <div class="box">
-              <div class="box-body">
-                <table id="example1" class="table table-bordered table-hover table-striped">
-                    <thead style="background-color: #222D32; color:white;">
-                        <th>Position</th>
-                        <th>Candidates</th>
-                        <th>votes</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                          <td>President</td>
-                          <td>Moses Omondi</td>
-                          <td>34</td>
-                        </tr>
-                        <tr>
-                          <td>Academics</td>
-                          <td>Moses Omondi</td>
-                          <td>34</td>
-                        </tr>
-                        <tr>
-                          <td>Secretary</td>
-                          <td>Moses Omondi</td>
-                          <td>34</td>
-                        </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
       </div>
-</section>
-      
+      <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-green">
+          <div class="inner">
+            <h3>{{count_candidates}}</h3>          
+            <p>No. of Candidates</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-black-tie"></i>
+          </div>
+          <a href="{{url_for('candidates')}}" class="small-box-footer">More Info <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      <!-- ./col -->
+      <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-blue">
+          <div class="inner">
+            <h3>{{count_voters}}</h3>             
+            <p>Total Voters</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-users"></i>
+          </div>
+          <a href="{{url_for('voters')}}" class="small-box-footer">More Info <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      <!-- ./col -->
+      <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-maroon">
+          <div class="inner">
+            <h3>201</h3>
+            <p>Voters Voted</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-edit"></i>
+          </div>
+          <a href="{{url_for('votes')}}" class="small-box-footer">More Info <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      <!-- ./col -->
+      <h2 style="font-style: bold; margin: 20px;">Results</h2>
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-body">
+              <table id="example1" class="table table-bordered table-hover table-striped">
+                  <thead style="background-color: #222D32; color:white;">
+                      <th>Position</th>
+                      <th>Candidates</th>
+                      <th>votes</th>
+                  </thead>
+                  <tbody>
+                      <tr>
+                        <td>President</td>
+                        <td>Moses Omondi</td>
+                        <td>34</td>
+                      </tr>
+                      <tr>
+                        <td>Academics</td>
+                        <td>Moses Omondi</td>
+                        <td>34</td>
+                      </tr>
+                      <tr>
+                        <td>Secretary</td>
+                        <td>Moses Omondi</td>
+                        <td>34</td>
+                      </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+    </div>
+  </section>
+{% endif %}
 {% endblock content %}
