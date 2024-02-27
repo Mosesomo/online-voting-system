@@ -61,7 +61,7 @@ def ballot():
     for position in positions:
         candidates = Candidate.query.filter_by(position=position).all()
         grouped_candidates[position] = candidates
-        
+
     form = BallotForm()
 
     return render_template('ballot.html',
@@ -96,7 +96,7 @@ def ballot_positions():
     for position in positions:
         candidates = Candidate.query.filter_by(position=position).all()
         grouped_candidates[position] = candidates
-    
+
 
     return render_template('admin/ballot_position.html',
                            grouped_candidates=grouped_candidates)

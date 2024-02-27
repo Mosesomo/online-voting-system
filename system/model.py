@@ -5,7 +5,7 @@ from flask_login import UserMixin
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-    
+
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -14,10 +14,9 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)  # Add a field to distinguish between voters and admins
-    
     # Relationship to retrieve user's votes (for voters)
     votes = db.relationship('BallotPosition', lazy=True, viewonly=True)
-    
+
     def __repr__(self):
         return (
             f"User(id={self.id}, "
@@ -37,11 +36,10 @@ class Candidate(db.Model):
     candidate_img = db.Column(db.String(255), nullable=False, default="default.jpg")
     bio = db.Column(db.Text)
     position_id = db.Column(db.Integer, db.ForeignKey('position.id'))
-
-    # Relationships
-    votes = db.relationship('BallotPosition', back_populates='candidate', lazy=True)
     position = db.relationship('Position', back_populates='candidates')
-    
+    votes = db.relationship('BallotPosition', back_populates='candidate', lazy=True)
+
+
     def __repr__(self):
         return (
             f"Candidate("
@@ -51,18 +49,18 @@ class Candidate(db.Model):
             f"phone={self.phone}, "
             f"candidate_img={self.candidate_img}, "
             f"bio={self.bio}, "
-            f"position={self.position.position_name}"
+            f"position={self.position.position_name},"
+            f"position_id={self.position.position_id},"
+            f"votes={self.position.votes}"
         )
+
 
 class Position(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     position_name = db.Column(db.String(40), unique=True)
-
-    # Relationship
     candidates = db.relationship('Candidate', back_populates='position')
-    # Change back_populates to 'votes' to match BallotPosition model
     votes = db.relationship('BallotPosition', back_populates='position', lazy=True)
-    
+
     def __repr__(self):
         return (
             f"{self.id}, {self.position_name}"
@@ -79,7 +77,7 @@ class BallotPosition(db.Model):
     # Add back_populates to the relationships
     candidate = db.relationship('Candidate', back_populates='votes')
     position = db.relationship('Position', back_populates='votes')
-    
+
     def __repr__(self):
         return (
             f"BallotPosition(id={self.id}, "

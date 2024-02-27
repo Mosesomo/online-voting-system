@@ -1,13 +1,10 @@
-.login-box{
-    width: 100%;
-}
 
 .login-box-body{
     max-width: 400px;
     width: 100%;
     margin: 30px auto;
     border-radius: 10px;
-    padding: 40px 20px;
+    background: linear-gradient(#e66465, #9198e5);
 }
 
 .form-group legend{
@@ -71,9 +68,4 @@
 
 .main-sidebar{
     position: fixed;
-}
-
-.vote-container .img-circle{
-    width: 50px;
-    height: 50px;
 }
