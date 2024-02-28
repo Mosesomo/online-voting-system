@@ -27,6 +27,7 @@
         <li class="header">EXIT</li>
         <li class=""><a href="{{url_for('logout')}}"><i class="fa fa-power-off"></i> <span>Logout</span></a></li>
         {% else %}
+          <li class=""><a href="{{url_for('ballot_positions')}}"><i class="fa fa-file-text"></i> <span>Ballot Position</span></a></li>
           <li class="header">EXIT</li>
           <li class=""><a href="{{url_for('logout')}}"><i class="fa fa-power-off"></i> <span>Logout</span></a></li>
       {% endif %}

@@ -54,6 +54,11 @@ def logout():
 @app.route('/ballot', methods=['GET', 'POST'])
 @login_required
 def ballot():
+    # Check if the user has already voted
+    existing_votes = BallotPosition.query.filter_by(user_id=current_user.id).all()
+    if existing_votes:
+        flash('You have already voted.', 'danger')
+        return redirect(url_for('ballot_positions')) # or redirect to a different page
     # Query candidates grouped by position
     grouped_candidates = {}
     positions = Position.query.all()
@@ -61,9 +66,23 @@ def ballot():
     for position in positions:
         candidates = Candidate.query.filter_by(position=position).all()
         grouped_candidates[position] = candidates
-        
+    
     form = BallotForm()
-
+    if form.validate_on_submit():
+        # Extract selected candidate IDs for each position
+        for position, candidates in grouped_candidates.items():
+            selected_candidate_id = request.form.get(f'position_{position.id}')
+            if selected_candidate_id:
+                # Create a new BallotPosition instance for the selected candidate
+                ballot_position = BallotPosition(
+                    user_id=current_user.id,
+                    position_id=position.id,
+                    candidate_id=selected_candidate_id
+                )
+                db.session.add(ballot_position)
+        db.session.commit()
+        flash('Vote submitted successfully', 'success')
+        return redirect(url_for('ballot_positions')) # or redirect to a confirmation page
     return render_template('ballot.html',
                            grouped_candidates=grouped_candidates,
                            form=form)
@@ -73,7 +92,6 @@ def ballot():
 def positions():
     positions = Position.query.all()
     return render_template('admin/positions.html', positions=positions)
-
 
 @app.route('/dashboard/candidates')
 @login_required
