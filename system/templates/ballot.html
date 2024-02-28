@@ -2,7 +2,7 @@
 {% block content %}
 <section class="content">
   <h1 class="page-header text-center title"><b>University Election</b></h1>
-  
+
   <form method="POST"  action="">
     {{ form.hidden_tag() }}
     {% for position, candidates in grouped_candidates.items() %}
@@ -26,6 +26,6 @@
       {{form.submit_vote(class="btn btn-primary btn-flat")}}
     </div>
   </form>
-  
+
 </section>
 {% endblock content %}

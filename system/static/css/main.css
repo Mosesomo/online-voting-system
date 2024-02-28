@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 body {
     background: url('../images/voting-ballot-box.jpg') no-repeat center center fixed;
     background-size: cover;
@@ -8,13 +9,15 @@ body {
 .login-box{
     width: 100%;
 }
+=======
+>>>>>>> ae5f0a009d7c6f22b5e80232085fc953d2d4bf08
 
 .login-box-body{
     max-width: 400px;
     width: 100%;
     margin: 30px auto;
     border-radius: 10px;
-    padding: 40px 20px;
+    background: linear-gradient(#e66465, #9198e5);
 }
 
 .form-group legend{
@@ -78,9 +81,4 @@ body {
 
 .main-sidebar{
     position: fixed;
-}
-
-.vote-container .img-circle{
-    width: 50px;
-    height: 50px;
 }

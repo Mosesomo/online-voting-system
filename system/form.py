@@ -25,11 +25,11 @@ class RegistrationForm(FlaskForm):
                                      validators=[DataRequired(),
                                                  EqualTo('password')])
     submit = SubmitField('Register')
-    
+
     def validate_email(self, email):
         email = User.query.filter_by(email=email.data).first()
         if email:
             raise ValidationError('Email already exists!')
-        
+
 class BallotForm(FlaskForm):
     submit_vote = SubmitField('Vote')
