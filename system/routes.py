@@ -57,7 +57,7 @@ def ballot():
     # Check if the user has already voted
     existing_votes = BallotPosition.query.filter_by(user_id=current_user.id).all()
     if existing_votes:
-        flash('You have already voted.', 'danger')
+        flash('You have already voted')
         return redirect(url_for('ballot_positions')) # or redirect to a different page
     # Query candidates grouped by position
     grouped_candidates = {}
