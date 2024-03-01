@@ -136,6 +136,10 @@ with app.app_context():
     )
     db.session.add(ballot)"""
     
+    # candidate1 = Candidate.query.get(9)
+    # candidate1.candidate_img = 'img/boy6.jpeg'
+    
+    
     db.session.commit() # Use db.session.commit() instead of db.commit()
     
     users = User.query.all()

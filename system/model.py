@@ -50,7 +50,6 @@ class Candidate(db.Model):
             f"candidate_img={self.candidate_img}, "
             f"bio={self.bio}, "
             f"position={self.position.position_name},"
-            f"position_id={self.position.position_id},"
             f"votes={self.position.votes}"
         )
 

@@ -14,7 +14,8 @@
               <input type="radio" name="position_{{ position.id }}" value="{{ candidate.id }}">
             </div>
             <div>
-              <img src="{{url_for('static', filename='images/userplaceholder.png')}}" class="img-circle" alt="User Image">
+              <img src="{{url_for('static', filename=candidate.candidate_img)}}" class="img-circle" alt="">
+              <h5>{{candidate.bio}}</h5>
             </div>
             <h4>{{ candidate.first_name }} {{ candidate.last_name }}</h4>
           </div>

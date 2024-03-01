@@ -1,12 +1,18 @@
 body {
-    background: url('../images/voting-ballot-box.jpg') no-repeat center center fixed;
+    background: url('../img/voting-ballot-box.jpg') no-repeat center center fixed;
     background-size: cover;
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
 
 .login-box{
     width: 100%;
+    position: fixed;
+}
+
+.login-box .login-logo h1{
+    font-weight: 600;
+    font-size: 1em;
 }
 
 .login-box-body{
@@ -29,6 +35,10 @@ body {
 
 .form-group .form-control{
     border-radius: 7px;
+}
+
+.form-group .invalid-feedback span{
+    font-size: 1.5em;
 }
 
 .form-group .form-control-label{
@@ -59,6 +69,7 @@ body {
     color: blue;
 }
 
+
 .vote-content{
     padding: 30px;
     display: flex;
@@ -68,13 +79,34 @@ body {
     font-size: 1.3em;
 }
 
+.vote-content input{
+    font-size: 1.4em;
+}
+
 .vote-content img{
-    width: 60px;
-    height: 60px;
+    width: 100px;
+    height: 100px;
+    background-size: cover;
 }
 
 .vote-content h4{
-    font-weight: 500;
+    font-weight: 700;
+    color: grey;
+}
+
+.vote-content h5{
+    font-weight: 600;
+}
+
+.text-center .btn{
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-size: 25px;
+    transition: all ease .3s;
+}
+
+.text-center .btn:hover{
+    transform: scaleX(1.1);
 }
 
 .main-header{
@@ -84,4 +116,17 @@ body {
 
 .main-sidebar{
     position: fixed;
+    background-color: blue;
+}
+.main-footer{
+    width: 100%;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    opacity: 1;
+    border-top: 2px solid gray;
+    box-shadow: #9198e5;
+}
+.main-footer .hidden-xs{
+    width: 100%;
 }
