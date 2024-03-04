@@ -17,7 +17,7 @@
       {% if current_user.is_admin %}
         <li class="header">REPORTS</li>
         <li class=""><a href="{{url_for('home')}}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
-        <li class=""><a href="{{url_for('votes')}}"><span class="glyphicon glyphicon-lock"></span> <span>Votes</span></a></li>
+        <li class=""><a href="{{url_for('votes')}}"><i class="fa fa-edit"></i><span>Votes</span></a></li>
         <li class="header">MANAGE</li>
         <li class=""><a href="{{url_for('voters')}}"><i class="fa fa-users"></i> <span>Voters</span></a></li>
         <li class=""><a href="{{url_for('positions')}}"><i class="fa fa-tasks"></i> <span>Positions</span></a></li>

@@ -1,8 +1,15 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SubmitField, SelectField, EmailField,  PasswordField, BooleanField, RadioField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from flask_wtf.file import FileField, FileAllowed
+from wtforms import (
+    StringField,
+    IntegerField,
+    SubmitField,
+    SelectField, EmailField,
+    PasswordField, BooleanField,
+    RadioField)
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 from system.model import User
+from system import photos
 
 
 class LoginForm(FlaskForm):
@@ -33,3 +40,30 @@ class RegistrationForm(FlaskForm):
 
 class BallotForm(FlaskForm):
     submit_vote = SubmitField('Vote')
+    
+
+class CandidateForm(FlaskForm):
+    first_name = StringField('First name',
+                         validators=[DataRequired()])
+    last_name = StringField('Last name',
+                         validators=[DataRequired()])
+    email = EmailField('Email',
+                       validators=[DataRequired()])
+    phone = StringField('Phone no.', validators=[DataRequired(), Regexp('^\+?\d+$', message='Invalid phone number')])
+    bio = StringField('Biography')
+    position = SelectField('Position', choices=[
+        ('President', 'President'),
+        ('Academic sec', 'Academic sec'),
+        ('Accounts', 'Accounts'),
+        ('Games and sports', 'Games and sports')
+    ], validators=[DataRequired()])
+    candidate_img = FileField('Img URL',
+                              validators=[FileAllowed(photos, 'Only Images are allowed')]
+                              )
+    submit = SubmitField('Add')
+    
+    
+class AddPosition(FlaskForm):
+    position_name = StringField("Position name:", validators=[DataRequired()])
+    submit = SubmitField('Add')
+    

@@ -1,11 +1,13 @@
-from flask import render_template, url_for, redirect, flash, request
+import os
+from flask import render_template, url_for, redirect, flash, request, send_from_directory
 from itertools import groupby
 from sqlalchemy.sql import label
 from sqlalchemy import func
-from system import app, bcrypt, db
-from system.form import LoginForm, RegistrationForm, BallotForm
+from system import app, bcrypt, db, photos
+from system.form import LoginForm, RegistrationForm, BallotForm, CandidateForm, AddPosition
 from system.model import User, Candidate, BallotPosition, Position
 from flask_login import login_user, logout_user, current_user, login_required
+from werkzeug.utils import secure_filename
 
 
 # This route handles the authenication login
@@ -65,7 +67,7 @@ def ballot():
     # Check if the user has already voted
     existing_votes = BallotPosition.query.filter_by(user_id=current_user.id).all()
     if existing_votes:
-        flash('You have already voted')
+        flash('You have already voted!', 'warning')
         return redirect(url_for('ballot_positions')) # or redirect to a ballot_position page
     
     # Query candidates grouped by position
@@ -209,3 +211,143 @@ def get_candidates_with_highest_votes():
     )
 
     return candidates_with_max_votes, total_votes
+
+
+@app.route('/dashboard/candidates/add_candidate', methods=['GET', 'POST'])
+@login_required
+def add_candidate():
+    form = CandidateForm()
+    if form.validate_on_submit():
+        position = Position.query.filter_by(position_name=form.position.data).first()
+        if position:
+            # Check if a candidate with the same details already exists
+            existing_candidate = Candidate.query.filter_by(
+                first_name=form.first_name.data,
+                last_name=form.last_name.data,
+                email=form.email.data,
+                phone=form.phone.data,
+                bio=form.bio.data,
+                position=position
+            ).first()
+
+            if existing_candidate:
+                flash("Candidate with the same details already exists", 'danger')
+            else:
+                filename = photos.save(form.candidate_img.data)
+                file_url = url_for('server_uploaded_file', filename=filename)
+
+                candidate = Candidate(
+                    first_name=form.first_name.data,
+                    last_name=form.last_name.data,
+                    email=form.email.data,
+                    phone=form.phone.data,
+                    bio=form.bio.data,
+                    position=position,
+                    candidate_img=file_url
+                )
+                db.session.add(candidate)
+                db.session.commit()
+                flash("Candidate added successfully", 'success')
+                return redirect(url_for('candidates'))
+        else:
+            flash("Invalid position, Please try again", 'danger')
+    return render_template('admin/add_candidate.html', form=form)
+
+@app.route('/uploads/<filename>')
+def server_uploaded_file(filename):
+    return send_from_directory(app.config['UPLOADED_PHOTOS_DEST'], filename)
+
+
+@app.route('/dashboard/candidates/<int:candidate_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_candidate(candidate_id):
+    candidate = Candidate.query.get_or_404(candidate_id)
+    form = CandidateForm()
+
+    if form.validate_on_submit():
+        position = Position.query.filter_by(position_name=form.position.data).first()
+        
+        if position:
+            # Handle file upload
+            if form.candidate_img.data:
+                filename = photos.save(form.candidate_img.data)
+                file_url = url_for('server_uploaded_file', filename=filename)
+                candidate.candidate_img = file_url
+
+            # Update candidate details
+            candidate.first_name = form.first_name.data
+            candidate.last_name = form.last_name.data
+            candidate.email = form.email.data
+            candidate.phone = form.phone.data
+            candidate.bio = form.bio.data
+            candidate.position = position
+
+            db.session.commit()
+            flash("Candidate updated successfully", 'success')
+            return redirect(url_for('candidates'))
+        else:
+            flash("Invalid position", 'danger')
+
+    elif request.method == 'GET':
+        # Populate the form with existing data
+        form.first_name.data = candidate.first_name
+        form.last_name.data = candidate.last_name
+        form.email.data = candidate.email
+        form.phone.data = candidate.phone
+        form.bio.data = candidate.bio
+        form.position.data = candidate.position.position_name  # Assuming your form has a 'position' field
+
+    return render_template('admin/update_candidate.html', form=form, candidate=candidate)
+
+
+@app.route('/dashboard/candidates/<int:candidate_id>/delete', methods=['POST'] )
+def delete_candidate(candidate_id):
+    candidates = Candidate.query.get_or_404(candidate_id)
+    db.session.delete(candidates)
+    db.session.commit()
+    flash("Candidate deleted successfull", 'success')
+    return redirect(url_for('candidates'))
+
+@app.route('/dashboard/positions/add_new', methods=['GET', 'POST'])
+def add_new_position():
+    form = AddPosition()
+    if form.validate_on_submit():
+        existing_position = Position.query.filter_by(
+            position_name=form.position_name.data
+            ).first()
+        
+        if existing_position:
+            flash("Position already exists, please try again!", 'warning')
+            return redirect(url_for('add_new_position'))
+        else:
+            new_position = Position(
+                position_name = form.position_name.data
+            )
+            db.session.add(new_position)
+            db.session.commit()
+            flash("Position added successfully", 'success')
+            return redirect(url_for('positions'))
+    return render_template('admin/add_position.html', form=form)
+
+@app.route('/dashboard/positions/<int:position_id>/delete', methods=['GET', 'POST'])
+def delete_position(position_id):
+    position = Position.query.get_or_404(position_id)
+    db.session.delete(position)
+    db.session.commit()
+    flash("Position has been deleted successfully", 'warning')
+    return redirect(url_for('positions'))
+
+@app.route('/dashboard/positions/<int:position_id>/edit', methods=['GET', 'POST'])
+def edit_position(position_id):
+    position = Position.query.get_or_404(position_id)
+    form = AddPosition()
+    if form.validate_on_submit():
+        position.position_name = form.position_name.data
+        db.session.commit()
+        flash("Position edited successfully", 'success')
+        return redirect(url_for('positions'))
+    elif request.method == 'GET':
+        form.position_name.data = position.position_name
+        
+    return render_template('admin/edit_position.html', form=form)
+        

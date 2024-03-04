@@ -6,18 +6,21 @@
     {% for position, candidates in grouped_candidates.items() %}
       <div class="vote-container">
       
-        <h3>{{ position.position_name }}</h3>
-        {% for candidate in candidates %}
-          <div class="vote-content">
-            <div>
-              <img src="{{ url_for('static', filename=candidate.candidate_img) }}" class="img-circle" alt=''>
-              <h5>{{candidate.bio}}</h5>
+        <h3 class="card-title text-center">{{ position.position_name }}</h3>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+          {% for candidate in candidates %}
+            <div class="col mb-4">
+              <div class="card h-100">
+                <img src="{% if candidate.candidate_img.startswith('img/') %}{{ url_for('static', filename=candidate.candidate_img) }}{% else %}{{ candidate.candidate_img }}{% endif %}" class="card-img-top img-fluid" height=50 alt=''>
+                <div class="card-body">
+                  <p>{{ candidate.bio }}</p>
+                  <h4>{{ candidate.first_name }}  {{ candidate.last_name }}</h4>
+                </div>
+              </div>
             </div>
-            <h4>{{ candidate.first_name }}  {{candidate.last_name}}</h4>
-          </div>
-        {% endfor %}
+          {% endfor %}
+        </div>
       </div>
     {% endfor %}
   </section>
 {% endblock content %}
-
