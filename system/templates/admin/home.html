@@ -6,7 +6,7 @@
     <div class="row">
       <div class="col-lg-3 col-xs-6">
         <!-- small box -->
-        <div class="small-box bg-aqua">
+        <div class="small-box bg-info">
           <div class="inner">
             <h3>{{count_position}}</h3>
             <p>No. of Positions</p>
@@ -33,7 +33,7 @@
       <!-- ./col -->
       <div class="col-lg-3 col-xs-6">
         <!-- small box -->
-        <div class="small-box bg-blue">
+        <div class="small-box bg-warning">
           <div class="inner">
             <h3>{{count_voters}}</h3>             
             <p>Total Voters</p>
@@ -47,10 +47,10 @@
       <!-- ./col -->
       <div class="col-lg-3 col-xs-6">
         <!-- small box -->
-        <div class="small-box bg-maroon">
+        <div class="small-box bg-primary">
           <div class="inner">
-            <h3>201</h3>
-            <p>Voters Voted</p>
+            <h3>{{total_votes}}</h3>
+            <p>Total Votes</p>
           </div>
           <div class="icon">
             <i class="fa fa-edit"></i>
@@ -64,27 +64,25 @@
           <div class="box">
             <div class="box-body">
               <table id="example1" class="table table-bordered table-hover table-striped">
-                  <thead style="background-color: #222D32; color:white;">
+                  <thead class="table-dark">
                       <th>Position</th>
                       <th>Candidates</th>
+                      <th>Photo</th>
                       <th>votes</th>
                   </thead>
                   <tbody>
+                    {% for candidate, max_votes in candidates_with_max_votes %}
                       <tr>
-                        <td>President</td>
-                        <td>Moses Omondi</td>
-                        <td>34</td>
+                        <td>{{ candidate.position.position_name }}</td>
+                        <td>{{ candidate.first_name }} {{ candidate.last_name }}</td>
+                        {% if candidate.candidate_img.startswith('img/') %}
+                          <td><img src="{{url_for('static', filename=candidate.candidate_img)}}" width="80" height="80" alt="{{ candidate.fullname }}'s Avatar" class="img img-fluid"></td>
+                        {% else %}
+                          <td><img src="{{candidate.candidate_img}}" width="80" height="80" alt="{{ candidate.fullname }}'s Avatar" class="img img-fluid"></td>
+                        {% endif %}
+                        <td>{{ max_votes }}</td>
                       </tr>
-                      <tr>
-                        <td>Academics</td>
-                        <td>Moses Omondi</td>
-                        <td>34</td>
-                      </tr>
-                      <tr>
-                        <td>Secretary</td>
-                        <td>Moses Omondi</td>
-                        <td>34</td>
-                      </tr>
+                  {% endfor %}
                 </tbody>
               </table>
             </div>

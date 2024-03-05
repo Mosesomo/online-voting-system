@@ -1,0 +1,10 @@
+python
+Flask
+flask-sqlalchemy
+flask-login
+To run the application, execute:
+python app.py
+sqlite extension
+flask-reuploads
+flask-wtf
+flask-bycrypt

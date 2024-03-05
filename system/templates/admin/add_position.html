@@ -1,0 +1,27 @@
+{% extends "root.html" %}
+{% block content %}
+{% if current_user.is_admin %}
+    <div class="login-box">
+        <div class="login-logo">
+            <h1>Online Voting System</h1>
+        </div>
+
+        <div class="login-box-body">
+            <!-- <p class="login-box-msg">Sign in to start your session</p> -->
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Add Position</legend>
+                    <div class="form-group">
+                        {{ form.position_name.label(class="form-control-label") }}
+                        {{ form.position_name(class="form-control form-control-md") }}
+                </fieldset>
+                <div class="col">
+                    <div class="col-xs-5">
+                        {{ form.submit(class="btn btn-success btn-block btn-flat") }}
+                </div>
+            </form>
+        </div>
+    </div>
+{% endif %}
+{% endblock content %} 

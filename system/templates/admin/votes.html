@@ -1,64 +1,38 @@
 {% extends 'root.html' %}
 {% block content %}
-{% if current_user.is_admin %}
-  <section class="content">
-    <div class="row">
-      <div class="col-xs-12">
-        <div class="box">
-          <div class="box-body">
-            <table id="example1" class="table table-bordered table-hover table-striped">
-                <thead style="background-color: #222D32; color:white;">
-                    <th>Position</th>
-                    <th>Candidates</th>
-                    <th>votes</th>
+  {% if current_user.is_admin %}
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-body">
+              <table id="example1" class="table table-bordered table-hover table-striped">
+                <thead class="table-dark">
+                  <th>Position</th>
+                  <th>Candidate</th>
+                  <th>Votes</th>
                 </thead>
                 <tbody>
-                    <tr>
-                      <td rowspan=3>President</td>
-                      <td>Moses Omondi</td>
-                      <td>34</td>
-                    </tr>
-                    <tr>
-                      <td>Moses Omondi</td>
-                      <td>34</td>
-                    </tr>
-                    <tr>
-                      <td>Moses Omondi</td>
-                      <td>34</td>
-                    </tr>
-                    <tr>
-                      <td rowspan=3>Academics</td>
-                      <td>Moses Omondi</td>
-                      <td>34</td>
-                    </tr>
-                    <tr>
-                      <td>Moses Omondi</td>
-                      <td>34</td>
-                    </tr>
-                    <tr>
-                      <td>Moses Omondi</td>
-                      <td>34</td>
-                    </tr>
-                    <tr>
-                      <td rowspan=3>Secretary</td>
-                      <td>Moses Omondi</td>
-                      <td>34</td>
-                    </tr>
-                    <tr>
-                      <td>Moses Omondi</td>
-                      <td>34</td>
-                    </tr>
-                    <tr>
-                      <td>Moses Omondi</td>
-                      <td>34</td>
-                    </tr>
-              </tbody>
-            </table>
+                  {% for position, candidates in grouped_candidates.items() %}
+                    {% for candidate in candidates %}
+                      <tr>
+                        {% if loop.first %}
+                          <td rowspan="{{ candidates|length }}">{{ position.position_name }}</td>
+                        {% endif %}
+                        <td>{{ candidate.first_name }} {{ candidate.last_name }}</td>
+                        <td>
+                          {% set vote_count = candidate.votes|length %}
+                          {{ vote_count }}
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-{% endif %}
+    </section>
+  {% endif %}
 {% endblock content %}
-

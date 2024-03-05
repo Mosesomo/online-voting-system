@@ -1,31 +1,34 @@
 {% extends 'root.html' %}
+
 {% block content %}
 <section class="content">
   <h1 class="page-header text-center title"><b>University Election</b></h1>
 
-  <form method="POST"  action="">
+  <form method="POST" action="">
     {{ form.hidden_tag() }}
     {% for position, candidates in grouped_candidates.items() %}
-      <div class="vote-container">
-        <h3>{{ position.position_name }}</h3>
+      <div class="vote-container mb-4">
+        <h3 class="mb-3">{{ position.position_name }}</h3>
         {% for candidate in candidates %}
-          <div class="vote-content">
-            <div class="">
-              <input type="radio" name="position_{{ position.id }}" value="{{ candidate.id }}">
+          <div class="vote-content border p-3 mb-3 bg-gray">
+            <div class="form-check mb-3 text-center">
+              <input class="form-check-input" type="radio" name="position_{{ position.id }}" value="{{ candidate.id }}" id="candidate_{{ candidate.id }}">
+              <label class="form-check-label" for="candidate_{{ candidate.id }}">
+                {% if candidate.candidate_img.startswith('img/') %}
+                  <img src="{{ url_for('static', filename=candidate.candidate_img) }}" class="img img-circle img-fluid" alt=''>
+                {% else %}
+                  <img src="{{ candidate.candidate_img }}" class="img img-circle img-fluid" alt=''>
+                {% endif %}
+              </label>
             </div>
-            <div>
-              <img src="{{url_for('static', filename='images/userplaceholder.png')}}" class="img-circle" alt="User Image">
-            </div>
-            <h4>{{ candidate.first_name }} {{ candidate.last_name }}</h4>
+            <h4 class="text-center">{{ candidate.first_name }} {{ candidate.last_name }}</h4>
           </div>
         {% endfor %}
       </div>
     {% endfor %}
 
     <div class="text-center">
-      <button type="button" class="btn btn-success btn-flat" id="preview"><i
-        class="fa fa-file-text"></i> Preview</button>
-      {{form.submit_vote(class="btn btn-primary btn-flat")}}
+      {{ form.submit_vote(class="btn btn-primary btn-flat") }}
     </div>
   </form>
 

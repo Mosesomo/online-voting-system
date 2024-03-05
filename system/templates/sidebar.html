@@ -5,19 +5,19 @@
     <!-- Sidebar user panel -->
     <div class="user-panel">
       <div class="pull-left image">
-        <img src="{{url_for('static', filename='images/userplaceholder.png')}}" class="img-circle" alt="User Image">
+        <img src="{{url_for('static', filename='img/userplaceholder.png')}}" class="img-circle" alt="User Image">
       </div>
-      <!--<div class="pull-left info">
+      <div class="pull-left info">
         <p>{{ request.user }}</p>
         <a><i class="fa fa-circle text-success"></i> Online</a>
-      </div>-->
+      </div>
     </div>
-    <!-- sidebar menu: : style can be found in sidebar.less -->
+    <!--sidebar menu-->
     <ul class="sidebar-menu" data-widget="tree">
       {% if current_user.is_admin %}
         <li class="header">REPORTS</li>
         <li class=""><a href="{{url_for('home')}}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
-        <li class=""><a href="{{url_for('votes')}}"><span class="glyphicon glyphicon-lock"></span> <span>Votes</span></a></li>
+        <li class=""><a href="{{url_for('votes')}}"><i class="fa fa-edit"></i><span>Votes</span></a></li>
         <li class="header">MANAGE</li>
         <li class=""><a href="{{url_for('voters')}}"><i class="fa fa-users"></i> <span>Voters</span></a></li>
         <li class=""><a href="{{url_for('positions')}}"><i class="fa fa-tasks"></i> <span>Positions</span></a></li>
@@ -27,6 +27,7 @@
         <li class="header">EXIT</li>
         <li class=""><a href="{{url_for('logout')}}"><i class="fa fa-power-off"></i> <span>Logout</span></a></li>
         {% else %}
+          <li class=""><a href="{{url_for('ballot_positions')}}"><i class="fa fa-file-text"></i> <span>Ballot Position</span></a></li>
           <li class="header">EXIT</li>
           <li class=""><a href="{{url_for('logout')}}"><i class="fa fa-power-off"></i> <span>Logout</span></a></li>
       {% endif %}

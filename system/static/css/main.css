@@ -1,10 +1,29 @@
+body {
+    background: url('../img/voting-ballot-box.jpg') no-repeat center center fixed;
+    background-size: cover;
+    object-fit: cover;
+}
+
+.login-box{
+    width: 100%;
+}
+
+.login-box .login-logo h1{
+    font-weight: 600;
+    font-size: 1em;
+}
 
 .login-box-body{
-    max-width: 400px;
+    max-width: 470px;
     width: 100%;
-    margin: 30px auto;
-    border-radius: 10px;
-    background: linear-gradient(#e66465, #9198e5);
+    margin: 20px auto;
+    border-radius: 7px;
+    padding: 40px 30px;
+}
+
+
+.form-group{
+    padding: 7px;
 }
 
 .form-group legend{
@@ -12,60 +31,159 @@
     font-size: 1.8em;
     font-weight: 700;
 }
-.login-box-body .form-group{
-    font-size: 1.1em;
-}
 
 .form-group .form-control{
     border-radius: 7px;
 }
 
+/*.form-group .invalid-feedback span{
+    font-size: 1.5em;
+}*/
+
 .form-group .form-control-label{
-    font-size: 1.3em;
-    font-weight: 500;
+    font-weight: 600;
 }
 
-.col  .btn{
-    font-size: 1.3em;
+.login-box-body .col{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+.login-box-body .col .btn{
     border-radius: 5px;
-    margin-bottom: 10px;
+    transition: ease-in .5s;
+}
+
+.login-box-body .col .btn:hover{
+    transform: scale(1.2);
+}
+
+.alert{
+    max-width: 470px;
+    width: 100%;
+    margin: 10px auto;
+    border-radius: 5px;
+    color: aliceblue;
 }
 
 .content{
-    margin-top: 40px;
+    margin-top: 20px;
+}
+
+.content .row{
+    margin-top: 10px;
+}
+
+.box-body img{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    align-items: center;
+}
+
+.box-body td{
+    font-weight: 600;
+    font-size: 15px;
+    color: #250d0d;
 }
 
 .vote-container{
-    max-width: 600px;
+    max-width: 700px;
     width: 100%;
     margin: 30px auto;
     background-color: #fff;
     padding: 20px;
 }
+
+.vote-container .row{
+    margin-top: 6px;
+}
+
 .vote-container h3{
     border-bottom: 1px solid gray;
     font-weight: 700;
-    color: blue;
+    color: rgb(18, 98, 210);
+}
+.vote-container .row h4{
+    font-weight: 700;
+    text-align: center;
+    font-size: 16px;
+    position: absolute;
+    bottom: 0;
+}
+
+.vote-container .row p{
+    font-weight: normal;
 }
 
 .vote-content{
     padding: 30px;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
     width: 100%;
     font-size: 1.3em;
 }
 
+.vote-content input{
+    font-size: 1.2em;
+}
+
+.vote-container img{
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    text-align: center;
+}
+
+.vote-content img{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    text-align: center;
+}
+
 .vote-content h4{
     font-weight: 500;
+    color: grey;
+    font-size: 20px
+}
+
+.text-center .btn{
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-size: 25px;
+    transition: all ease .3s;
+}
+
+.text-center .btn:hover{
+    transform: scaleX(1.1);
 }
 
 .main-header{
-    position: fixed;
     width: 100%;
+}
+
+.main-header a{
+    text-decoration: none;
+    font-weight: 600;
 }
 
 .main-sidebar{
     position: fixed;
 }
+
+.sidebar .sidebar-menu li a{
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.main-footer .container{
+    width: 100%;
+    position: relative;
+    bottom: 0;
+ }

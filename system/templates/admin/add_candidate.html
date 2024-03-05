@@ -1,0 +1,97 @@
+{% extends "root.html" %}
+{% block content %}
+<section class="content">
+    <div class="login-box">
+        <div class="login-logo">
+            <h1>Voting System</h2>
+        </div>
+
+        <div class="login-box-body">
+            <form action=" " method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">Add Candidate</legend>
+                        <div class="form-group">
+                            {{ form.first_name.label(class="form-control-label") }}
+                            {{ form.first_name(class="form-control form-control-md") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.last_name.label(class="form-control-label") }}
+                            {{ form.last_name(class="form-control form-control-md") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.email.label(class="form-control-label") }}
+                            {% if form.email.errors %}
+                                {{ form.email(class="form-control form-control-md is-invalid") }}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.email.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.email(class="form-control form-control-md") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.phone.label(class="form-control-label") }}
+                            {% if form.phone.errors %}
+                                {{ form.phone(class="form-control form-control-md is-invalid") }}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.phone.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.phone(class="form-control form-control-md") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.bio.label(class="form-control-label") }}
+                            {% if form.bio.errors %}
+                                {{ form.bio(class="form-control form-control-md is-invalid") }}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.bio.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.bio(class="form-control form-control-md") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.position.label(class="form-control-label") }}
+                            {% if form.position.errors %}
+                                {{ form.position(class="form-control form-control-md is-invalid") }}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.position.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.position(class="form-control form-control-md") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.candidate_img.label(class="form-control-label") }}
+                            {% if form.candidate_img.errors %}
+                                {{ form.candidate_img(class="form-control form-control-md is-invalid") }}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.candidate_img.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.candidate_img(class="form-control form-control-md") }}
+                            {% endif %}
+                        </div>
+                    </fieldset>
+                    <div class='col'>
+                        <div class="col-xs-6">
+                            {{ form.submit(class="btn btn-primary btn-block btn-flat") }}
+                        </div>
+                    </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock content %}
