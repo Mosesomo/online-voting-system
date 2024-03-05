@@ -1,6 +1,7 @@
 body {
     background: url('../img/voting-ballot-box.jpg') no-repeat center center fixed;
     background-size: cover;
+    object-fit: cover;
 }
 
 .login-box{
@@ -181,16 +182,8 @@ body {
     font-size: 15px;
 }
 
-.main-footer{
+.main-footer .container{
     width: 100%;
+    position: relative;
     bottom: 0;
-    display: flex;
-    justify-content: space-between;
-    opacity: 1;
-    border-top: 2px solid gray;
-    box-shadow: #9198e5;
-    bottom: 0;
-}
-.main-footer .hidden-xs{
-    width: 100%;
-}
+ }

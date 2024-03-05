@@ -1,5 +1,6 @@
 {% extends "root.html" %}
 {% block content %}
+{% if current_user.is_admin %}
 <section class="content">
     <div class="login-box">
         <div class="login-logo">
@@ -94,4 +95,5 @@
         </div>
     </div>
 </section>
+{% endif %}
 {% endblock content %}

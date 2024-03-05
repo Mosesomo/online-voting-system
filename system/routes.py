@@ -7,7 +7,6 @@ from system import app, bcrypt, db, photos
 from system.form import LoginForm, RegistrationForm, BallotForm, CandidateForm, AddPosition
 from system.model import User, Candidate, BallotPosition, Position
 from flask_login import login_user, logout_user, current_user, login_required
-from werkzeug.utils import secure_filename
 
 
 # This route handles the authenication login
@@ -301,6 +300,7 @@ def edit_candidate(candidate_id):
 
 
 @app.route('/dashboard/candidates/<int:candidate_id>/delete', methods=['POST'] )
+@login_required
 def delete_candidate(candidate_id):
     candidates = Candidate.query.get_or_404(candidate_id)
     db.session.delete(candidates)
@@ -309,6 +309,7 @@ def delete_candidate(candidate_id):
     return redirect(url_for('candidates'))
 
 @app.route('/dashboard/positions/add_new', methods=['GET', 'POST'])
+@login_required
 def add_new_position():
     form = AddPosition()
     if form.validate_on_submit():
@@ -330,6 +331,7 @@ def add_new_position():
     return render_template('admin/add_position.html', form=form)
 
 @app.route('/dashboard/positions/<int:position_id>/delete', methods=['GET', 'POST'])
+@login_required
 def delete_position(position_id):
     position = Position.query.get_or_404(position_id)
     db.session.delete(position)
@@ -338,6 +340,7 @@ def delete_position(position_id):
     return redirect(url_for('positions'))
 
 @app.route('/dashboard/positions/<int:position_id>/edit', methods=['GET', 'POST'])
+@login_required
 def edit_position(position_id):
     position = Position.query.get_or_404(position_id)
     form = AddPosition()
