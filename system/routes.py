@@ -5,8 +5,9 @@ from sqlalchemy.sql import label
 from sqlalchemy import func
 from system import app, bcrypt, db, photos
 from system.form import LoginForm, RegistrationForm, BallotForm, CandidateForm, AddPosition
-from system.model import User, Candidate, BallotPosition, Position
+from system.model import User, Candidate, BallotPosition, Position, VotingPeriod
 from flask_login import login_user, logout_user, current_user, login_required
+from datetime import datetime, timezone
 
 
 # This route handles the authenication login
@@ -15,19 +16,19 @@ from flask_login import login_user, logout_user, current_user, login_required
 @app.route('/account/', methods=['GET', 'POST'])
 @app.route('/account/login', methods=['GET', 'POST'])
 def login_home():
-    if current_user.is_authenticated: # checks if the current user is authenicated
-        return redirect(url_for('ballot'))
+    if current_user.is_authenticated: 
+        return redirect(url_for('ballot'))  # Redirect authenticated users to the ballot page directly
 
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password,
-                                               form.password.data):
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user)
             return redirect(url_for('ballot'))
         else:
-            flash('Login Unsuccessfull, please check email or password', 'danger')
+            flash('Login Unsuccessful, please check email or password', 'danger')
     return render_template('login.html', form=form)
+
 
 # This route handles the registration of voters
 # And stored the registered voters in our database
@@ -63,54 +64,97 @@ def logout():
 @app.route('/ballot', methods=['GET', 'POST'])
 @login_required
 def ballot():
-    # Check if the user has already voted
-    existing_votes = BallotPosition.query.filter_by(user_id=current_user.id).all()
-    if existing_votes:
-        flash('You have already voted!', 'warning')
-        return redirect(url_for('ballot_positions')) # or redirect to a ballot_position page
+    # Checking for voting period
+    voting_period = VotingPeriod.query.first()
+    current_time = datetime.now()
     
-    # Query candidates grouped by position
-    grouped_candidates = {}
-    positions = Position.query.all()
-
-    for position in positions:
-        candidates = Candidate.query.filter_by(position=position).all()
-        grouped_candidates[position] = candidates
+    print(f"Current Time: {current_time}")
+    print(f"Voting Period Start Time: {voting_period.start_time if voting_period else 'No Voting Period Found'}")
+    print(f"Current User is Admin: {current_user.is_admin}")
+    
+    if voting_period and current_time < voting_period.start_time and not current_user.is_admin:
+        flash(f'Voting is not currently opened! Please wait until {voting_period.start_time}', 'danger')
+        return redirect(url_for('logout')) # Redirect back to the
+    else:
+        # Check if the user has already voted
+        existing_votes = BallotPosition.query.filter_by(user_id=current_user.id).all()
+        if existing_votes:
+            flash('You have already voted!', 'warning')
+            return redirect(url_for('ballot_positions')) # or redirect to a ballot_position page
         
-    form = BallotForm()
-    if form.validate_on_submit():
-        # Extract selected candidate IDs for each position
-        for position, candidates in grouped_candidates.items():
-            selected_candidate_id = request.form.get(f'position_{position.id}')
-            if selected_candidate_id:
-                # Create a new BallotPosition instance for the selected candidate
-                ballot_position = BallotPosition(
-                    user_id=current_user.id,
-                    position_id=position.id,
-                    candidate_id=selected_candidate_id
-                )
-                db.session.add(ballot_position)
-        db.session.commit()
-        flash('Vote submitted successfully', 'success')
-        return redirect(url_for('ballot_positions')) # or redirect to a confirmation page
-    return render_template('ballot.html',
-                           grouped_candidates=grouped_candidates,
-                           form=form)
+        # Query candidates grouped by position
+        grouped_candidates = {}
+        positions = Position.query.all()
 
-# This route queries and list the position from the database
-@app.route('/dashboard/positions')
-@login_required
-def positions():
-    positions = Position.query.all() # Quering positions from database
-    return render_template('admin/positions.html', positions=positions)
+        for position in positions:
+            candidates = Candidate.query.filter_by(position=position).all()
+            grouped_candidates[position] = candidates
+            
+        form = BallotForm()
+        if form.validate_on_submit():
+            # Check if a vote has been cast for each position
+            for position in positions:
+                if not request.form.get(f'position_{position.id}'):
+                    flash(f'You have not cast a vote for {position.position_name} position!,\
+                        Please make sure to vote for all positions availabel in the ballot',
+                        'danger')
+                    return render_template('ballot.html',
+                                        grouped_candidates=grouped_candidates,
+                                        form=form)
+            
+            # Extract selected candidate IDs for each position
+            for position, candidates in grouped_candidates.items():
+                selected_candidate_id = request.form.get(f'position_{position.id}')
+                if selected_candidate_id:
+                    # Create a new BallotPosition instance for the selected candidate
+                    ballot_position = BallotPosition(
+                        user_id=current_user.id,
+                        position_id=position.id,
+                        candidate_id=selected_candidate_id
+                    )
+                    db.session.add(ballot_position)
+            db.session.commit()
+            flash('Vote submitted successfully', 'success')
+            return redirect(url_for('ballot_positions')) # or redirect to a confirmation page
+        return render_template('ballot.html',
+                            grouped_candidates=grouped_candidates,
+                            form=form)
 
-# This route queries and list available candidates
-@app.route('/dashboard/candidates')
-@login_required
-def candidates():
-    candidates = Candidate.query.all()
-    return render_template('admin/candidates.html', candidates=candidates)
 
+@app.route('/dashboard/elections', methods=['GET', 'POST'])
+def elections():
+    upcoming_positions = Position.query.all()
+    current_time = datetime.now()
+    upcoming_elections = []
+
+    for position in upcoming_positions:
+        voting_period = VotingPeriod.query.first()
+
+        if voting_period is None:
+            # Handle the case where there is no voting period for the position
+            # You might want to skip this position or set a default status
+            continue
+
+        if current_time < voting_period.start_time:
+            status = 'Pending'
+            status_class = 'text-warning'
+        elif current_time >= voting_period.start_time and current_time <= voting_period.end_time:
+            status = 'Active'
+            status_class = 'text-success'
+        else:
+            status = 'Expired'
+            status_class = 'text-danger'
+
+        upcoming_elections.append({
+            'id': position.id,
+            'position_name': position.position_name,
+            'num_candidates': len(position.candidates),
+            'start_time': voting_period.start_time,
+            'end_time': voting_period.end_time,
+            'status': status,
+            'status_class': status_class
+        })
+    return render_template('admin/period.html', upcoming_elections=upcoming_elections)
 
 # This route queries and list the voters(users)
 @app.route('/dashboard/voters')
@@ -118,6 +162,18 @@ def candidates():
 def voters():
     voters = User.query.all()
     return render_template('admin/voters.html', voters=voters)
+
+
+
+@app.route('/dashboard/positions')
+def positions():
+    positions = Position.query.all()
+    return render_template('admin/positions.html', positions=positions)
+
+@app.route('/dashboard/candidates')
+def candidates():
+    candidates = Candidate.query.all()
+    return render_template('admin/candidates.html', candidates=candidates)
 
 
 # This routes list candidates with their positions

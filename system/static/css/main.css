@@ -95,6 +95,7 @@ body {
     width: 100%;
     margin: 30px auto;
     background-color: #fff;
+    box-shadow: 0 8px 8px 8px rgba(48, 6, 237, 0.1);
     padding: 20px;
 }
 
@@ -104,8 +105,10 @@ body {
 
 .vote-container h3{
     border-bottom: 1px solid gray;
-    font-weight: 700;
+    font-weight: 600;
     color: rgb(18, 98, 210);
+    font-size: 20px;
+    text-align: center;
 }
 .vote-container .row h4{
     font-weight: 700;
@@ -125,7 +128,6 @@ body {
     justify-content: space-evenly;
     align-items: center;
     width: 100%;
-    font-size: 1.3em;
 }
 
 .vote-content input{
@@ -140,8 +142,8 @@ body {
 }
 
 .vote-content img{
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     object-fit: cover;
     text-align: center;
@@ -150,7 +152,7 @@ body {
 .vote-content h4{
     font-weight: 500;
     color: grey;
-    font-size: 20px
+    font-size: 16px
 }
 
 .text-center .btn{
@@ -161,7 +163,11 @@ body {
 }
 
 .text-center .btn:hover{
-    transform: scaleX(1.1);
+    transform: scale(1.1);
+}
+
+.btn-close{
+    border: none;
 }
 
 .main-header{

@@ -59,6 +59,8 @@ class Position(db.Model):
     position_name = db.Column(db.String(40), unique=True)
     candidates = db.relationship('Candidate', back_populates='position')
     votes = db.relationship('BallotPosition', back_populates='position', lazy=True)
+    voting_periods = db.relationship('VotingPeriod', back_populates='position')
+    
 
     def __repr__(self):
         return (
@@ -86,3 +88,13 @@ class BallotPosition(db.Model):
             f"candidate={self.candidate}, "
             f"position={self.position})"
         )
+        
+class VotingPeriod(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    start_time = db.Column(db.DateTime, nullable=False)
+    end_time = db.Column(db.DateTime, nullable=False)
+    position_id = db.Column(db.Integer, db.ForeignKey('position.id'))
+    position = db.relationship('Position', back_populates='voting_periods')
+    
+    def __repr__(self):
+        return (f'{self.id}, {self.start_time}, {self.end_time}, {self.position_id}')

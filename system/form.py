@@ -8,7 +8,7 @@ from wtforms import (
     RadioField)
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp
 from flask_wtf.file import FileField, FileAllowed, FileRequired
-from system.model import User
+from system.model import User, Position
 from system import photos
 
 
@@ -38,9 +38,10 @@ class RegistrationForm(FlaskForm):
         if email:
             raise ValidationError('Email already exists!')
 
+
 class BallotForm(FlaskForm):
     submit_vote = SubmitField('Vote')
-    
+
 
 class CandidateForm(FlaskForm):
     first_name = StringField('First name',

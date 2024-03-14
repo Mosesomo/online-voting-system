@@ -2,9 +2,9 @@
 
 {% block content %}
 <section class="content">
-  <h1 class="page-header text-center title"><b>University Election</b></h1>
+ <h1 class="page-header text-center title"><b>University Election</b></h1>
 
-  <form method="POST" action="">
+ <form method="POST" action="{{ url_for('ballot') }}">
     {{ form.hidden_tag() }}
     {% for position, candidates in grouped_candidates.items() %}
       <div class="vote-container mb-4">
@@ -15,22 +15,23 @@
               <input class="form-check-input" type="radio" name="position_{{ position.id }}" value="{{ candidate.id }}" id="candidate_{{ candidate.id }}">
               <label class="form-check-label" for="candidate_{{ candidate.id }}">
                 {% if candidate.candidate_img.startswith('img/') %}
-                  <img src="{{ url_for('static', filename=candidate.candidate_img) }}" class="img img-circle img-fluid" alt=''>
+                 <img src="{{ url_for('static', filename=candidate.candidate_img) }}" class="img img-fluid" alt=''>
                 {% else %}
-                  <img src="{{ candidate.candidate_img }}" class="img img-circle img-fluid" alt=''>
+                 <img src="{{ candidate.candidate_img }}" class="img img-circle img-fluid" alt=''>
                 {% endif %}
               </label>
             </div>
             <h4 class="text-center">{{ candidate.first_name }} {{ candidate.last_name }}</h4>
           </div>
         {% endfor %}
+        <!-- Display validation errors for each position -->
       </div>
     {% endfor %}
 
     <div class="text-center">
       {{ form.submit_vote(class="btn btn-primary btn-flat") }}
     </div>
-  </form>
+ </form>
 
 </section>
 {% endblock content %}
