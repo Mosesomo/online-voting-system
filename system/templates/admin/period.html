@@ -27,11 +27,8 @@
                         <td>{{election.end_time}}</td>
                         <td class={{election.status_class}}>{{election.status}}</td>
                         <td>
-                            <a href=""><button
+                            <a href="{{url_for('editVotingPeriod')}}"><button
                                 class='btn btn-primary btn-sm edit btn-flat'><i class='fa fa-edit'></i> Edit</button></a>
-                            <button type="button" class='btn btn-danger btn-sm delete btn-flat'
-                            data-bs-toggle="modal" data-bs-target="#exampleModal"><i
-                                class='fa fa-trash'></i> Delete</button>
                         </td>
                     </tr>
                 {% endfor %}

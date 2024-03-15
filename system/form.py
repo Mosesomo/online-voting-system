@@ -5,7 +5,7 @@ from wtforms import (
     SubmitField,
     SelectField, EmailField,
     PasswordField, BooleanField,
-    RadioField)
+    RadioField, DateTimeField)
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from system.model import User, Position
@@ -67,4 +67,11 @@ class CandidateForm(FlaskForm):
 class AddPosition(FlaskForm):
     position_name = StringField("Position name:", validators=[DataRequired()])
     submit = SubmitField('Add')
+    
+class EditVotingPeriod(FlaskForm):
+    start_time = DateTimeField('Start Time', validators=[DataRequired()],
+                               format='%Y-%m-%d %H:%M:%S', render_kw={"placeholder": "YY-MM-DD H:M:S"})
+    end_time = DateTimeField('End Time', validators=[DataRequired()],
+                             format='%Y-%m-%d %H:%M:%S', render_kw={"placeholder": "YY-MM-DD H:M:S"})
+    submit = SubmitField('Update')
     

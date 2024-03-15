@@ -2,36 +2,40 @@
 
 {% block content %}
 <section class="content">
- <h1 class="page-header text-center title"><b>University Election</b></h1>
+    <h1 class="page-header text-center title"><b>University Election</b></h1>
 
- <form method="POST" action="{{ url_for('ballot') }}">
-    {{ form.hidden_tag() }}
-    {% for position, candidates in grouped_candidates.items() %}
-      <div class="vote-container mb-4">
-        <h3 class="mb-3">{{ position.position_name }}</h3>
-        {% for candidate in candidates %}
-          <div class="vote-content border p-3 mb-3 bg-gray">
-            <div class="form-check mb-3 text-center">
-              <input class="form-check-input" type="radio" name="position_{{ position.id }}" value="{{ candidate.id }}" id="candidate_{{ candidate.id }}">
-              <label class="form-check-label" for="candidate_{{ candidate.id }}">
-                {% if candidate.candidate_img.startswith('img/') %}
-                 <img src="{{ url_for('static', filename=candidate.candidate_img) }}" class="img img-fluid" alt=''>
-                {% else %}
-                 <img src="{{ candidate.candidate_img }}" class="img img-circle img-fluid" alt=''>
-                {% endif %}
-              </label>
+    <form method="POST" action="{{ url_for('ballot') }}">
+        {{ form.hidden_tag() }}
+        {% for position, candidates in grouped_candidates.items() %}
+        <div class="vote-container">
+            <h3 class="mb-3">{{ position.position_name }}</h3>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for candidate in candidates %}
+                <div class="col mb-4">
+                    <div class="card h-100 text-center bg-gray">
+                        <label class="card-img-top mb-6" for="candidate_{{ candidate.id }}">
+                            {% if candidate.candidate_img.startswith('img/') %}
+                            <img src="{{ url_for('static', filename=candidate.candidate_img) }}" class="img-fluid" height="200" alt=''>
+                            {% else %}
+                            <img src="{{ candidate.candidate_img }}" class="img-fluid" height="200" alt=''>
+                            {% endif %}
+                        </label>
+                        <div class="card-body w-full p-3 flex gap-5">
+                            <h4 class="text-center mb-6">{{ candidate.first_name }} {{ candidate.last_name }}</h4>
+                            <p class="text-primary">vote <input class="form-check-input p-2" type="radio" name="position_{{ position.id }}" value="{{ candidate.id }}" id="candidate_{{ candidate.id }}"></p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-            <h4 class="text-center">{{ candidate.first_name }} {{ candidate.last_name }}</h4>
-          </div>
+            <!-- Display validation errors for each position -->
+        </div>
         {% endfor %}
-        <!-- Display validation errors for each position -->
-      </div>
-    {% endfor %}
 
-    <div class="text-center">
-      {{ form.submit_vote(class="btn btn-primary btn-flat") }}
-    </div>
- </form>
+        <div class="text-center">
+            {{ form.submit_vote(class="btn btn-primary btn-flat") }}
+        </div>
+    </form>
 
 </section>
 {% endblock content %}

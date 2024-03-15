@@ -18,6 +18,7 @@ body {
     width: 100%;
     margin: 20px auto;
     border-radius: 7px;
+    box-shadow: 0 8px 8px 8px rgba(48, 6, 237, 0.1);
     padding: 40px 30px;
 }
 

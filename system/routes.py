@@ -4,7 +4,7 @@ from itertools import groupby
 from sqlalchemy.sql import label
 from sqlalchemy import func
 from system import app, bcrypt, db, photos
-from system.form import LoginForm, RegistrationForm, BallotForm, CandidateForm, AddPosition
+from system.form import LoginForm, RegistrationForm, BallotForm, CandidateForm, AddPosition, EditVotingPeriod
 from system.model import User, Candidate, BallotPosition, Position, VotingPeriod
 from flask_login import login_user, logout_user, current_user, login_required
 from datetime import datetime, timezone
@@ -60,7 +60,6 @@ def logout():
     return redirect(url_for('login_home'))
 
 
-# This route handles voting process
 @app.route('/ballot', methods=['GET', 'POST'])
 @login_required
 def ballot():
@@ -72,53 +71,60 @@ def ballot():
     print(f"Voting Period Start Time: {voting_period.start_time if voting_period else 'No Voting Period Found'}")
     print(f"Current User is Admin: {current_user.is_admin}")
     
-    if voting_period and current_time < voting_period.start_time and not current_user.is_admin:
-        flash(f'Voting is not currently opened! Please wait until {voting_period.start_time}', 'danger')
-        return redirect(url_for('logout')) # Redirect back to the
+    if voting_period:
+        if current_time > voting_period.end_time and not current_user.is_admin:
+            flash(f'The voting period has ended. Closed at {voting_period.end_time}', 'danger')
+            return redirect(url_for('logout')) # Redirect back to  login page
+        elif current_time < voting_period.start_time and not current_user.is_admin:
+            flash(f'Voting is not currently open! Please wait until {voting_period.start_time}', 'danger')
+            return redirect(url_for('logout')) # Redirect back to  login page
     else:
-        # Check if the user has already voted
-        existing_votes = BallotPosition.query.filter_by(user_id=current_user.id).all()
-        if existing_votes:
-            flash('You have already voted!', 'warning')
-            return redirect(url_for('ballot_positions')) # or redirect to a ballot_position page
+        flash('No voting period found.', 'danger')
+        return redirect(url_for('logout')) # Redirect back to  login page
+    
+    # Check if the user has already voted
+    existing_votes = BallotPosition.query.filter_by(user_id=current_user.id).all()
+    if existing_votes:
+        flash('You have already voted.', 'warning')
+        return redirect(url_for('ballot_positions')) # or redirect to a ballot_position page
         
-        # Query candidates grouped by position
-        grouped_candidates = {}
-        positions = Position.query.all()
+    # Query candidates grouped by position
+    grouped_candidates = {}
+    positions = Position.query.all()
 
+    for position in positions:
+        candidates = Candidate.query.filter_by(position=position).all()
+        grouped_candidates[position] = candidates
+        
+    form = BallotForm()
+    if form.validate_on_submit():
+        # Check if a vote has been cast for each position
         for position in positions:
-            candidates = Candidate.query.filter_by(position=position).all()
-            grouped_candidates[position] = candidates
-            
-        form = BallotForm()
-        if form.validate_on_submit():
-            # Check if a vote has been cast for each position
-            for position in positions:
-                if not request.form.get(f'position_{position.id}'):
-                    flash(f'You have not cast a vote for {position.position_name} position!,\
-                        Please make sure to vote for all positions availabel in the ballot',
-                        'danger')
-                    return render_template('ballot.html',
-                                        grouped_candidates=grouped_candidates,
-                                        form=form)
-            
-            # Extract selected candidate IDs for each position
-            for position, candidates in grouped_candidates.items():
-                selected_candidate_id = request.form.get(f'position_{position.id}')
-                if selected_candidate_id:
-                    # Create a new BallotPosition instance for the selected candidate
-                    ballot_position = BallotPosition(
-                        user_id=current_user.id,
-                        position_id=position.id,
-                        candidate_id=selected_candidate_id
-                    )
-                    db.session.add(ballot_position)
-            db.session.commit()
-            flash('Vote submitted successfully', 'success')
-            return redirect(url_for('ballot_positions')) # or redirect to a confirmation page
-        return render_template('ballot.html',
-                            grouped_candidates=grouped_candidates,
-                            form=form)
+            if not request.form.get(f'position_{position.id}'):
+                flash(f'You have not cast a vote for {position.position_name} position!,\
+                    Please make sure to vote for all positions available in the ballot',
+                    'danger')
+                return render_template('ballot.html',
+                                    grouped_candidates=grouped_candidates,
+                                    form=form)
+        
+        # Extract selected candidate IDs for each position
+        for position, candidates in grouped_candidates.items():
+            selected_candidate_id = request.form.get(f'position_{position.id}')
+            if selected_candidate_id:
+                # Create a new BallotPosition instance for the selected candidate
+                ballot_position = BallotPosition(
+                    user_id=current_user.id,
+                    position_id=position.id,
+                    candidate_id=selected_candidate_id
+                )
+                db.session.add(ballot_position)
+        db.session.commit()
+        flash('Vote submitted successfully', 'success')
+        return redirect(url_for('ballot_positions')) # or redirect to a confirmation page
+    return render_template('ballot.html',
+                        grouped_candidates=grouped_candidates,
+                        form=form)
 
 
 @app.route('/dashboard/elections', methods=['GET', 'POST'])
@@ -409,4 +415,19 @@ def edit_position(position_id):
         form.position_name.data = position.position_name
         
     return render_template('admin/edit_position.html', form=form)
+
+@app.route('/dashboard/elections/edit_time', methods=['GET', 'POST'])
+def editVotingPeriod():
+    election = VotingPeriod.query.get_or_404(1)
+    form = EditVotingPeriod()
+    if form.validate_on_submit():
+        election.start_time = form.start_time.data
+        election.end_time = form.end_time.data
+        db.session.commit()
+        flash('Voting period updated successfully', 'success')
+        return redirect(url_for('elections'))
+    elif request.method == 'GET':
+        form.start_time.data = election.start_time
+        form.end_time.data = election.end_time
         
+    return render_template('admin/edit_period.html', form=form)

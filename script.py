@@ -152,7 +152,7 @@ with app.app_context():
     
     
     period = VotingPeriod.query.get(1)
-    period.start_time = datetime(2024, 3, 14, 16, 40, 0)
+    period.end_time = datetime(2024, 3, 15, 11, 35, 0)
     # db.session.delete(VotingPeriod.query.get(1))
     
     db.session.commit() # Use db.session.commit()
