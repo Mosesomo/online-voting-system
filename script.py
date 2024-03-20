@@ -15,7 +15,8 @@ with app.app_context():
             last_name='user',
             email='admin@example.com',
             is_admin=True,
-            password=hashed_password
+            password=hashed_password,
+            email_confirmed = True
             )
         db.session.add(user) # Use db.session.add() instead of db.add_all()
     user = User(
@@ -23,7 +24,8 @@ with app.app_context():
         last_name='Njeri',
         email='njeri@example.com',
         is_admin=False,
-        password='password'
+        password='password',
+        email_confirmed=True
     )
     db.session.add(user)
         
@@ -140,20 +142,24 @@ with app.app_context():
     # candidate1 = Candidate.query.get(9)
     # candidate1.candidate_img = 'img/boy6.jpeg'
     
-    start_time = datetime(2024, 3, 15, 0, 0, 0) # March 15, 2024, 9:00 AM
-    end_time = datetime(2024, 3, 16, 17, 0, 0) # March 16, 2024, 5:00 PM
+    start_time = datetime(2024, 3, 18, 6, 0, 0) # March 15, 2024, 9:00 AM
+    end_time = datetime(2024, 3, 18, 17, 0, 0) # March 16, 2024, 5:00 PM
     position_id = 1
 
     # Create a new voting period entry
     new_voting_period = VotingPeriod(start_time=start_time, end_time=end_time, position_id=position_id)
 
     # Add the new entry to the session
-    db.session.add(new_voting_period)"""
+    db.session.add(new_voting_period)
     
     
-    period = VotingPeriod.query.get(1)
-    period.end_time = datetime(2024, 3, 15, 11, 35, 0)
+    # period = VotingPeriod.query.get(1)
+    # period.end_time = datetime(2024, 3, 15, 11, 35, 0)
     # db.session.delete(VotingPeriod.query.get(1))
+    #users = User.query.all()
+    # db.session.delete(users)"""
+    
+    # db.session.delete(User.query.get(3))
     
     db.session.commit() # Use db.session.commit()
     

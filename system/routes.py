@@ -1,13 +1,13 @@
 import os
+from click import confirm
 from flask import render_template, url_for, redirect, flash, request, send_from_directory
-from itertools import groupby
-from sqlalchemy.sql import label
 from sqlalchemy import func
-from system import app, bcrypt, db, photos
+from system import app, bcrypt, db, photos, serial, mail
 from system.form import LoginForm, RegistrationForm, BallotForm, CandidateForm, AddPosition, EditVotingPeriod
 from system.model import User, Candidate, BallotPosition, Position, VotingPeriod
 from flask_login import login_user, logout_user, current_user, login_required
-from datetime import datetime, timezone
+from datetime import datetime
+from flask_mail import Message
 
 
 # This route handles the authenication login
@@ -22,7 +22,7 @@ def login_home():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
+        if user and bcrypt.check_password_hash(user.password, form.password.data) and user.email_confirmed:
             login_user(user)
             return redirect(url_for('ballot'))
         else:
@@ -48,10 +48,39 @@ def register():
             password=hashed_password)
         db.session.add(user)
         db.session.commit()
-        flash('Registered successfully', 'success')
+        flash(f'Welcome {user.first_name}, your voting account is registered successfully.\
+            A confirmation email has been sent to your email, click the link to confirm your email to proceed', 'success')
+        
+        # send confirmation link
+        token = serial.dumps(user.email, salt='email-confirm')
+        confirm_url = url_for('confirm_email', token=token, _external=True)
+        send_confirmation_message(user.email, confirm_url)
+        
         return redirect(url_for('login_home'))
     return render_template('register.html', form=form)
 
+
+def send_confirmation_message(email, confirm_url):
+    msg = Message('Confirm Your Email', sender='noreply@mosesomo.tech', recipients=[email])
+    msg.body = f'Please click the link to confirm your email: {confirm_url}'
+    mail.send(msg)
+    
+
+@app.route('/confirm_email/<token>')
+def confirm_email(token):
+    try:
+        email = serial.loads(token, salt='email-confirm', max_age=3600)
+        user = User.query.filter_by(email=email).first()
+        if user:
+            user.email_confirmed = True
+            db.session.commit()
+            flash('Your email has been confirmed successfully! You can now login', 'success')
+        else:
+            flash('Invalid token or user not found.', 'danger')
+    except:
+        flash('The confirmation link is invalid or expired.', 'danger')
+        return redirect(url_for('register'))
+    return redirect(url_for('login_home'))
 
 # This routes logs out the user from the system
 @app.route('/logout')
@@ -63,6 +92,9 @@ def logout():
 @app.route('/ballot', methods=['GET', 'POST'])
 @login_required
 def ballot():
+    if current_user.is_admin:
+        return redirect(url_for('home'))
+    
     # Checking for voting period
     voting_period = VotingPeriod.query.first()
     current_time = datetime.now()
@@ -279,7 +311,10 @@ def get_candidates_with_highest_votes():
 def add_candidate():
     form = CandidateForm()
     if form.validate_on_submit():
-        position = Position.query.filter_by(position_name=form.position.data).first()
+        # Get the position ID from the form data
+        position_id = form.position.data
+        # Query the Position object based on the position ID
+        position = Position.query.get(position_id)
         if position:
             # Check if a candidate with the same details already exists
             existing_candidate = Candidate.query.filter_by(
@@ -311,8 +346,10 @@ def add_candidate():
                 flash("Candidate added successfully", 'success')
                 return redirect(url_for('candidates'))
         else:
-            flash("Invalid position, Please try again", 'danger')
+            flash("Invalid position, please make sure to add a position available in\
+                the ballot, check on spellings and extra spaces", 'danger')
     return render_template('admin/add_candidate.html', form=form)
+
 
 @app.route('/uploads/<filename>')
 def server_uploaded_file(filename):
@@ -431,3 +468,10 @@ def editVotingPeriod():
         form.end_time.data = election.end_time
         
     return render_template('admin/edit_period.html', form=form)
+
+@app.route('/results')
+def results():
+    candidates_with_max_votes, total_votes = get_candidates_with_highest_votes()
+    return render_template('admin/results.html',
+                           candidates_with_max_votes=candidates_with_max_votes,
+                           total_votes=total_votes)

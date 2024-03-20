@@ -9,18 +9,16 @@
           <div class="box-body">
             <table id="example1" class="table table-bordered table-hover table-striped">
               <thead class="table-dark">
-                <th>ID</th>
-                <th>Election Name</th>
-                <th># Candidates</th>
-                <th>Starting Date</th>
-                <th>Ending Date</th>
+                <th>Election</th>
+                <th>#Candidates</th>
+                <th>Starting</th>
+                <th>Ending</th>
                 <th>Status</th>
                 <th>Action</th>
               </thead>
               <tbody>
                 {% for election in upcoming_elections %}
                     <tr>
-                        <td>{{election.id}}</td>
                         <td>{{election.position_name}}</td>
                         <td>{{election.num_candidates}}</td>
                         <td>{{election.start_time}}</td>

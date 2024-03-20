@@ -15,7 +15,7 @@
                 <th>ID</th>
                 <th>Full Name</th>
                 <th>Position</th>
-                <th>Bio</th>
+
                 <th>Photo</th>
                 <th>Action</th>
               </thead>
@@ -25,7 +25,6 @@
                   <td>{{ candidate.id }}</td>
                   <td>{{ candidate.first_name }} {{candidate.last_name}}</td>
                   <td>{{ candidate.position.position_name }}</td>
-                  <td>{{ candidate.bio }}</td>
                   {% if candidate.candidate_img.startswith('img/') %}
                   <td><img src="{{url_for('static', filename=candidate.candidate_img)}}" width="80" height="80"
                       alt="{{ candidate.fullname }}'s Avatar" class="img img-fluid"></td>

@@ -1,0 +1,38 @@
+{% extends 'root.html' %}
+{% block content %}
+<!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <!-- ./col -->
+      <h2 style="font-style: bold; margin: 20px;">Results</h2>
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-body">
+              <table id="example1" class="table table-bordered table-hover table-striped">
+                  <thead class="table-dark">
+                      <th>Position</th>
+                      <th>Candidates</th>
+                      <th>Photo</th>
+                      <th>votes</th>
+                  </thead>
+                  <tbody>
+                    {% for candidate, max_votes in candidates_with_max_votes %}
+                      <tr>
+                        <td>{{ candidate.position.position_name }}</td>
+                        <td>{{ candidate.first_name }} {{ candidate.last_name }}</td>
+                        {% if candidate.candidate_img.startswith('img/') %}
+                          <td><img src="{{url_for('static', filename=candidate.candidate_img)}}" width="80" height="80" alt="{{ candidate.fullname }}'s Avatar" class="img img-fluid"></td>
+                        {% else %}
+                          <td><img src="{{candidate.candidate_img}}" width="80" height="80" alt="{{ candidate.fullname }}'s Avatar" class="img img-fluid"></td>
+                        {% endif %}
+                        <td>{{ max_votes }}</td>
+                      </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+    </div>
+  </section>
+{% endblock content %}

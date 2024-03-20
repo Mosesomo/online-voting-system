@@ -44,26 +44,26 @@ class BallotForm(FlaskForm):
 
 
 class CandidateForm(FlaskForm):
-    first_name = StringField('First name',
-                         validators=[DataRequired()])
-    last_name = StringField('Last name',
-                         validators=[DataRequired()])
-    email = EmailField('Email',
-                       validators=[DataRequired()])
+    first_name = StringField('First name', validators=[DataRequired()])
+    last_name = StringField('Last name', validators=[DataRequired()])
+    email = EmailField('Email', validators=[DataRequired()])
     phone = StringField('Phone no.', validators=[DataRequired(), Regexp('^\+?\d+$', message='Invalid phone number')])
     bio = StringField('Biography')
-    position = SelectField('Position', choices=[
-        ('President', 'President'),
-        ('Academic sec', 'Academic sec'),
-        ('Accounts', 'Accounts'),
-        ('Games and sports', 'Games and sports')
-    ], validators=[DataRequired()])
-    candidate_img = FileField('Img URL',
-                              validators=[FileAllowed(photos, 'Only Images are allowed')]
-                              )
+    
+    # Dynamically populate choices for the position field from the database
+    position = SelectField('Position', coerce=int, validators=[DataRequired()])
+    # position = StringField('Position', validators=[DataRequired()],
+                           # render_kw={'Chairperson': 'Chairperson'})
+
+    candidate_img = FileField('Img URL', validators=[FileAllowed(photos, 'Only Images are allowed')])
     submit = SubmitField('Add')
+
+    def __init__(self, *args, **kwargs):
+        super(CandidateForm, self).__init__(*args, **kwargs)
+        # Query positions from the database and set choices for the position field
+        self.position.choices = [(position.id, position.position_name) for position in Position.query.all()]
     
-    
+
 class AddPosition(FlaskForm):
     position_name = StringField("Position name:", validators=[DataRequired()])
     submit = SubmitField('Add')
