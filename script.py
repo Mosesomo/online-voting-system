@@ -5,7 +5,7 @@ from datetime import datetime
 with app.app_context():
     db.create_all()
     
-    """hashed_password = (bcrypt.generate_password_hash
+    hashed_password = (bcrypt.generate_password_hash
                            ('password')
                            .decode('utf-8'))
     admin_user = User.query.filter_by(first_name='admin').first()
@@ -13,13 +13,15 @@ with app.app_context():
         user = User(
             first_name='admin',
             last_name='user',
+            reg_no='admin-05-0236/2017',
             email='admin@example.com',
             is_admin=True,
             password=hashed_password,
-            email_confirmed = True
+            is_approved=True,
+            student_id='default.jpg'
             )
         db.session.add(user) # Use db.session.add() instead of db.add_all()
-    user = User(
+    """user = User(
         first_name='Anne',
         last_name='Njeri',
         email='njeri@example.com',

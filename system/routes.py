@@ -21,8 +21,8 @@ def login_home():
 
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data) and user.email_confirmed:
+        user = User.query.filter_by(reg_no=form.reg_no.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data) and user.is_approved:
             login_user(user)
             return redirect(url_for('ballot'))
         else:
@@ -41,46 +41,37 @@ def register():
         hashed_password = (bcrypt.generate_password_hash
                            (form.password.data)
                            .decode('utf-8'))
+        filename = photos.save(form.student_id.data)
+        file_url = url_for('server_uploaded_file', filename=filename)
         user = User(
             first_name=form.first_name.data,
             last_name=form.last_name.data,
             email=form.email.data,
+            reg_no=form.reg_no.data,
+            student_id=file_url,
             password=hashed_password)
         db.session.add(user)
         db.session.commit()
-        flash(f'Welcome {user.first_name}, your voting account is registered successfully.\
-            A confirmation email has been sent to your email, click the link to confirm your email to proceed', 'success')
-        
-        # send confirmation link
-        token = serial.dumps(user.email, salt='email-confirm')
-        confirm_url = url_for('confirm_email', token=token, _external=True)
-        send_confirmation_message(user.email, confirm_url)
+        flash(f'Welcome {user.first_name}, your voting account has been registered successfully.\
+            An email will be sent to you if your are verified.', 'success')
         
         return redirect(url_for('login_home'))
     return render_template('register.html', form=form)
 
+@app.route('/dashboard/verify/<int:user_id>', methods=['GET', 'POST'])
+def verify(user_id):
+    user = User.query.get_or_404(user_id)
+    if user:
+        user.is_approved = True
+        db.session.commit()
+        send_confirmation_message(user.email)
+        flash('Verified successfully', 'success')
+        return redirect(url_for('home'))
 
-def send_confirmation_message(email, confirm_url):
-    msg = Message('Confirm Your Email', sender='noreply@mosesomo.tech', recipients=[email])
-    msg.body = f'Please click the link to confirm your email: {confirm_url}'
+def send_confirmation_message(email):
+    msg = Message('Approval  Email', sender='noreply@mosesomo.tech', recipients=[email])
+    msg.body = f'Your voting account has been verified successfully.'
     mail.send(msg)
-    
-
-@app.route('/confirm_email/<token>')
-def confirm_email(token):
-    try:
-        email = serial.loads(token, salt='email-confirm', max_age=3600)
-        user = User.query.filter_by(email=email).first()
-        if user:
-            user.email_confirmed = True
-            db.session.commit()
-            flash('Your email has been confirmed successfully! You can now login', 'success')
-        else:
-            flash('Invalid token or user not found.', 'danger')
-    except:
-        flash('The confirmation link is invalid or expired.', 'danger')
-        return redirect(url_for('register'))
-    return redirect(url_for('login_home'))
 
 # This routes logs out the user from the system
 @app.route('/logout')
@@ -108,11 +99,12 @@ def ballot():
             flash(f'The voting period has ended. Closed at {voting_period.end_time}', 'danger')
             return redirect(url_for('logout')) # Redirect back to  login page
         elif current_time < voting_period.start_time and not current_user.is_admin:
-            flash(f'Voting is not currently open! Please wait until {voting_period.start_time}', 'danger')
-            return redirect(url_for('logout')) # Redirect back to  login page
+            flash(f'Voting is not currently open! Please wait until {voting_period.start_time}.\
+                  for now you can view the ballot positions', 'danger')
+            return redirect(url_for('ballot_positions')) # Redirect back to  login page
     else:
         flash('No voting period found.', 'danger')
-        return redirect(url_for('logout')) # Redirect back to  login page
+        return redirect(url_for('ballot_positions')) # Redirect back to  login page
     
     # Check if the user has already voted
     existing_votes = BallotPosition.query.filter_by(user_id=current_user.id).all()
@@ -202,7 +194,6 @@ def voters():
     return render_template('admin/voters.html', voters=voters)
 
 
-
 @app.route('/dashboard/positions')
 def positions():
     positions = Position.query.all()
@@ -259,7 +250,8 @@ def home():
                            count_voters=count_voters,
                            count_candidates=count_candidates,
                            candidates_with_max_votes=candidates_with_max_votes,
-                           total_votes=total_votes)
+                           total_votes=total_votes,
+                           voters=voters)
 
 
 def get_candidates_with_highest_votes():

@@ -59,30 +59,67 @@
         </div>
       </div>
       <!-- ./col -->
-      <h2 style="font-style: bold; margin: 20px;">Results</h2>
+      <h2 style="font-style: bold; margin: 20px;">Approve Voters</h2>
         <div class="col-xs-12">
           <div class="box">
             <div class="box-body">
               <table id="example1" class="table table-bordered table-hover table-striped">
                   <thead class="table-dark">
-                      <th>Position</th>
-                      <th>Candidates</th>
-                      <th>Photo</th>
-                      <th>votes</th>
+                      <th>Name</th>
+                      <th>Reg No</th>
+                      <th>Student ID</th>
+                      <th>Email</th>
+                      <th>Status</th>
+                      <th>Action</th>
                   </thead>
                   <tbody>
-                    {% for candidate, max_votes in candidates_with_max_votes %}
-                      <tr>
-                        <td>{{ candidate.position.position_name }}</td>
-                        <td>{{ candidate.first_name }} {{ candidate.last_name }}</td>
-                        {% if candidate.candidate_img.startswith('img/') %}
-                          <td><img src="{{url_for('static', filename=candidate.candidate_img)}}" width="80" height="80" alt="{{ candidate.fullname }}'s Avatar" class="img img-fluid"></td>
-                        {% else %}
-                          <td><img src="{{candidate.candidate_img}}" width="80" height="80" alt="{{ candidate.fullname }}'s Avatar" class="img img-fluid"></td>
+                    {% for voter in voters %}
+                      {% if not voter.is_admin %}
+                        <tr>
+                          <td>{{voter.first_name}} {{voter.last_name}}</td>
+                          <td>{{voter.reg_no}}</td>
+                          <td><img src="{{voter.student_id}}" width="80" height="80"></td>
+                          <td>{{voter.email}}</td>
+                          <td>
+                            <button class='btn {{"btn-primary" if voter.is_approved else "btn-warning"}} btn-sm edit btn-flat rounded text-light'>
+                              {{'verified' if voter.is_approved else 'Pending'}}
+                            </button>
+                          </td>
+                          <td class="center d-flex w-100 gap-2">
+                            {% if not voter.approved %}
+                                <form action="{{ url_for('verify', user_id=voter.id) }}" method="POST">
+                                    <button type="submit" class="btn btn-success btn-sm edit btn-flat {{'d-none' if voter.is_approved else 'd-block'}}"><i class="fa fa-check"></i> verify</button>
+                                </form>
+                            {% endif %}
+                            <button type="button" class='btn btn-danger btn-sm delete btn-flat'
+                              data-bs-toggle="modal" data-bs-target="#exampleModal"><i
+                                class='fa fa-times'></i> Cancel</button>
+                          </td>
+                        </tr>
+                          <!-- Modal -->
+                          <div class="modal fade" id="exampleModal" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cancel approval</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                      aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <p>Are you sure you want to cancel the approval of voter?<p>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <form action="" method="POST">
+                                      <input class="btn btn-danger" type="submit" value="Delete">
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
                         {% endif %}
-                        <td>{{ max_votes }}</td>
-                      </tr>
-                  {% endfor %}
+                      {% endfor %}
                 </tbody>
               </table>
             </div>

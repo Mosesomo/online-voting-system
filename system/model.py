@@ -1,4 +1,3 @@
-from email.policy import default
 from system import db, login_manager
 from flask_login import UserMixin
 
@@ -12,10 +11,12 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
+    reg_no = db.Column(db.String(50), nullable=True)
     email = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)  # Add a field to distinguish between voters and admins
-    email_confirmed = db.Column(db.Boolean, default=False)
+    is_approved = db.Column(db.Boolean, default=False)
+    student_id = db.Column(db.String(255), nullable=True, default='pic.jpg')
     # Relationship to retrieve user's votes (for voters)
     votes = db.relationship('BallotPosition', lazy=True, viewonly=True)
 
@@ -26,7 +27,6 @@ class User(db.Model, UserMixin):
             f"last_name={self.last_name}, "
             f"email={self.email}, "
             f"password={self.password}, "
-            f"email_confirmed={self.email_confirmed}, "
             f"is_admin={self.is_admin})"
         )
 

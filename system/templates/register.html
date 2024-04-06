@@ -7,7 +7,7 @@
         </div>
 
         <div class="login-box-body">
-            <form action=" " method="POST">
+            <form action=" " method="POST" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
                     <fieldset class="form-group">
                         <legend class="border-bottom mb-4">Register</legend>
@@ -30,6 +30,32 @@
                                 </div>
                             {% else %}
                                 {{ form.email(class="form-control form-control-md") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.reg_no.label(class="form-control-label") }}
+                            {% if form.reg_no.errors %}
+                                {{ form.reg_no(class="form-control form-control-md is-invalid") }}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.reg_no.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.reg_no(class="form-control form-control-md") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.student_id.label(class="form-control-label") }}
+                            {% if form.student_id.errors %}
+                                {{ form.student_id(class="form-control form-control-md is-invalid") }}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.student_id.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.student_id(class="form-control form-control-md") }}
                             {% endif %}
                         </div>
                         <div class="form-group">

@@ -13,31 +13,47 @@ from system import photos
 
 
 class LoginForm(FlaskForm):
-    email = StringField('Email',
+    reg_no = StringField('Reg No.',
                          validators=[DataRequired()])
     password = PasswordField('Password',
                            validators=[DataRequired()])
     submit = SubmitField('login')
 
 
+# List of department codes
+departments = ['bscit', 'bbit', 'bbam', 'bird', 'staff', 'admin', 'dit', 'dbit']
+
+# Create the regex pattern
+department_pattern = '|'.join(departments)
+
 class RegistrationForm(FlaskForm):
-    first_name = StringField('First name',
-                         validators=[DataRequired()])
-    last_name = StringField('Last name',
-                         validators=[DataRequired()])
-    email = EmailField('Email',
-                       validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    confirm_password = PasswordField('Confirm Password',
-                                     validators=[DataRequired(),
-                                                 EqualTo('password')])
+    first_name = StringField('First name', validators=[DataRequired()])
+    last_name = StringField('Last name', validators=[DataRequired()])
+    email = EmailField('Email', validators=[DataRequired(), Email()])
+    reg_no = StringField('Reg No.', validators=[DataRequired(),
+                                                Regexp(rf'^{department_pattern}-[0-9]{2}-[0-9]{4}/[0-9]{4}$',
+                                                       message='Invalid Registration Number')],
+                         render_kw={"placeholder": "bscit-00-000/yr"})
+    student_id = FileField('Upload your Id', validators=[FileAllowed(photos, 'Only Images are allowed')])
+    password = PasswordField("Password", validators=[DataRequired(), Length(min=8, max=16)],
+                             render_kw={"Password": "Password"})
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    
     submit = SubmitField('Register')
 
     def validate_email(self, email):
         email = User.query.filter_by(email=email.data).first()
         if email:
             raise ValidationError('Email already exists!')
-
+        
+    def validate_password(self, password_field):
+        password = password_field.data
+        # Check if password contains at least one uppercase letter, one lowercase letter, and one digit
+        if (not any(c.isupper() for c in password)
+            or not any(c.islower() for c in password)
+            or not any(c.isdigit() for c in password)):
+            raise ValidationError('Password must contain at least one uppercase letter,\
+                one lowercase letter, and one digit.')
 
 class BallotForm(FlaskForm):
     submit_vote = SubmitField('Vote')
@@ -47,7 +63,7 @@ class CandidateForm(FlaskForm):
     first_name = StringField('First name', validators=[DataRequired()])
     last_name = StringField('Last name', validators=[DataRequired()])
     email = EmailField('Email', validators=[DataRequired()])
-    phone = StringField('Phone no.', validators=[DataRequired(), Regexp('^\+?\d+$', message='Invalid phone number')])
+    phone = StringField('Phone no.', validators=[DataRequired(), Regexp(r'^\+?\d+$', message='Invalid phone number')])
     bio = StringField('Biography')
     
     # Dynamically populate choices for the position field from the database

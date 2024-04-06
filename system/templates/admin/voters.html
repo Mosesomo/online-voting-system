@@ -11,18 +11,27 @@
                     <th>ID</th>
                     <th>Firstname</th>
                     <th>Lastname</th>
+                    <th>Reg No.</th>
                     <th>Email</th>
+                    <th>Status</th>
               </thead>
               <tbody>
                 {% for voter in voters %}
-                  <tr>
-                    <td>{{ voter.id }}</td>
-                    <td>{{ voter.first_name }}</td>
-                    <td>{{ voter.last_name }}</td>
-                    <td>{{ voter.email }}</td>
-                  </tr>
-                {% endfor %}      
-
+                  {% if not voter.is_admin %}
+                    <tr>
+                      <td>{{ voter.id }}</td>
+                      <td>{{ voter.first_name }}</td>
+                      <td>{{ voter.last_name }}</td>
+                      <td>{{ voter.reg_no }}</td>
+                      <td>{{ voter.email }}</td>
+                      <td>
+                        <button class='btn {{"btn-primary" if voter.is_approved else "btn-warning"}} btn-sm edit btn-flat rounded text-light'>
+                          {{'verified' if voter.is_approved else 'Pending'}}
+                        </button>
+                      </td>
+                    </tr>
+                  {% endif %}
+                {% endfor %} 
               </tbody>
             </table>
           </div>
