@@ -46,6 +46,11 @@ class RegistrationForm(FlaskForm):
         if email:
             raise ValidationError('Email already exists!')
         
+    def validate_reg_no(self, reg_no_field):
+        reg_no = User.query.filter_by(reg_no=reg_no_field.data)
+        if reg_no:
+            raise ValidationError('Reg No already exists!')
+        
     def validate_password(self, password_field):
         password = password_field.data
         # Check if password contains at least one uppercase letter, one lowercase letter, and one digit

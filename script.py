@@ -5,7 +5,7 @@ from datetime import datetime
 with app.app_context():
     db.create_all()
     
-    hashed_password = (bcrypt.generate_password_hash
+    """hashed_password = (bcrypt.generate_password_hash
                            ('password')
                            .decode('utf-8'))
     admin_user = User.query.filter_by(first_name='admin').first()
@@ -20,7 +20,7 @@ with app.app_context():
             is_approved=True,
             student_id='default.jpg'
             )
-        db.session.add(user) # Use db.session.add() instead of db.add_all()
+        db.session.add(user)""" # Use db.session.add() instead of db.add_all()
     """user = User(
         first_name='Anne',
         last_name='Njeri',
@@ -46,7 +46,7 @@ with app.app_context():
         email="moses4@gmail.com",
         phone='+2547838387',
         bio="Have a growth mindset",
-        candidate_img='img/userplaceholder.png',
+        candidate_img='img/boy1.webp',
         position_id=1
     )
     
@@ -56,7 +56,7 @@ with app.app_context():
         email="onyango4@gmail.com",
         phone='+2547838387',
         bio="Have a growth mindset",
-        candidate_img='img/userplaceholder.png',
+        candidate_img='img/boy2.webp',
         position_id=2
     )
     
@@ -68,7 +68,7 @@ with app.app_context():
         email="owuor@gmail.com",
         phone='+25487654',
         bio="Leader for all",
-        candidate_img='img/userplaceholder.png',
+        candidate_img='img/boy5.jpeg',
         position_id=4
     )
     
@@ -80,7 +80,7 @@ with app.app_context():
         email="cheptum@gmail.com",
         phone='+2546567',
         bio="Have a growth mindset",
-        candidate_img='img/userplaceholder.png',
+        candidate_img='img/lady3.jpeg',
         position_id=3
     )
     
@@ -92,7 +92,7 @@ with app.app_context():
         email='cynthia@gmail.com',
         phone='+4545653',
         bio="Leader for all",
-        candidate_img='img/userplaceholder.png',
+        candidate_img='img/lady5.jpeg',
         position_id=4
     )
     
@@ -104,7 +104,7 @@ with app.app_context():
         email="george@gmail.com",
         phone='+254455387',
         bio="Have a growth mindset",
-        candidate_img='img/userplaceholder.png',
+        candidate_img='img/boy6.jpeg',
         position_id=3
     )
     
@@ -116,7 +116,7 @@ with app.app_context():
         email="kiptum@gmail.com",
         phone='+25476654',
         bio="Intelligent and ready to deliver",
-        candidate_img='img/userplaceholder.png',
+        candidate_img='img/boy3.webp',
         position_id=1
     )
     
@@ -128,7 +128,7 @@ with app.app_context():
         email="joan@gmail.com",
         phone='+2547665544',
         bio="Together we can",
-        candidate_img='img/userplaceholder.png',
+        candidate_img='img/lady4.webp',
         position_id=2
     )
     
@@ -144,22 +144,22 @@ with app.app_context():
     # candidate1 = Candidate.query.get(9)
     # candidate1.candidate_img = 'img/boy6.jpeg'
     
-    start_time = datetime(2024, 3, 18, 6, 0, 0) # March 15, 2024, 9:00 AM
-    end_time = datetime(2024, 3, 18, 17, 0, 0) # March 16, 2024, 5:00 PM
+    start_time = datetime(2024, 4, 7, 13, 0, 0) # March 15, 2024, 9:00 AM
+    end_time = datetime(2024, 3, 8, 17, 0, 0) # March 16, 2024, 5:00 PM
     position_id = 1
 
     # Create a new voting period entry
-    new_voting_period = VotingPeriod(start_time=start_time, end_time=end_time, position_id=position_id)
+    new_voting_period = VotingPeriod(start_time=start_time, end_time=end_time, position_id=position_id)"""
 
     # Add the new entry to the session
-    db.session.add(new_voting_period)
+    # db.session.add(new_voting_period)
     
     
     # period = VotingPeriod.query.get(1)
-    # period.end_time = datetime(2024, 3, 15, 11, 35, 0)
+    # period.end_time = datetime(2024, 4, 8, 17, 35, 0)
     # db.session.delete(VotingPeriod.query.get(1))
     #users = User.query.all()
-    # db.session.delete(users)"""
+    # db.session.delete(users)
     
     # db.session.delete(User.query.get(3))
     
@@ -167,7 +167,7 @@ with app.app_context():
     
     users = User.query.all()
     for user in users:
-        print(user)
+        print(user.votes)
     print('\n')  
     positions = Position.query.all()
     for position in positions:
@@ -179,7 +179,8 @@ with app.app_context():
     print("\n")   
     ballots = BallotPosition.query.all()
     for ballot in ballots:
-        print(ballot)
+        print("Voter Name: {}\nVoted for: {}\nPosition: {}\n"
+              .format(ballot.user.first_name, ballot.candidate.first_name, ballot.position.position_name))
     print("\n")
         
     voting_period = VotingPeriod.query.all()

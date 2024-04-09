@@ -1,0 +1,40 @@
+{% extends 'root.html' %}
+{% block content %}
+  <section class="content">
+    <div class="row">
+        <h3 class="bold">My vote <button class="btn btn-success"><i class="fa fa-check"></i></button></h3>
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-body">
+            <table id="example1" class="table table-bordered table-hover table-striped">
+              <thead class="table-dark">
+                    <th>Position</th>
+                    <th>Candidate</th>
+                    <th>Status</th>
+              </thead>
+              <tbody>
+                {% for vote in ballots %}
+                    <tr>
+                        <td>{{ vote.position.position_name }}</td>
+                        <td>
+                            <p>Name: {{vote.candidate.first_name}} {{vote.candidate.last_name}}</p>
+                            <p class="w-100 d-flex space-between">
+                                Profile: <img class="img-fluid" style="max-width: 200px; margin: auto 10px; height: 200px; object-fit: cover;" src="{{url_for('static', filename=vote.candidate.candidate_img)}}" width="80" height="80">
+                            </p>
+                            <p>Bio: {{vote.candidate.bio}}</p>
+                        </td>
+                        <td>
+                            <button class='btn btn-success btn-sm edit btn-flat rounded text-light text-center'>
+                                <i class="fa fa-check"></i>
+                              </button>
+                        </td>
+                    </tr>
+                {% endfor %} 
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock content %}

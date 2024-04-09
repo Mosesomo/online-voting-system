@@ -64,7 +64,7 @@ def verify(user_id):
     if user:
         user.is_approved = True
         db.session.commit()
-        send_confirmation_message(user.email)
+        # send_confirmation_message(user.email)
         flash('Verified successfully', 'success')
         return redirect(url_for('home'))
 
@@ -233,6 +233,14 @@ def votes():
         
     return render_template('admin/votes.html',
                            grouped_candidates=grouped_candidates)
+    
+
+@app.route('/my_votes/<int:user_id>', methods=['GET', 'POST'])
+def my_votes(user_id):
+    user = User.query.get_or_404(user_id)
+    if user:
+        ballots = BallotPosition.query.filter_by(user_id=current_user.id).all()
+    return render_template('user_votes.html', ballots=ballots)
 
 # This routes contains the dashbord and results
 @app.route('/dashboard')
