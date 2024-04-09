@@ -22,7 +22,11 @@ def login_home():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(reg_no=form.reg_no.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data) and user.is_approved:
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            if not user.is_approved:
+                flash('Your account is still on the verification process,\
+                    please wait for the confirmation email..', 'warning')
+                return redirect(url_for('login_home'))
             login_user(user)
             return redirect(url_for('ballot'))
         else:
@@ -68,6 +72,16 @@ def verify(user_id):
         flash('Verified successfully', 'success')
         return redirect(url_for('home'))
 
+@app.route('/dashboard/cancel_verification/<int:user_id>', methods=['GET', 'POST']) 
+def cancel_verification(user_id):
+    user = User.query.get_or_404(user_id)
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        flash('Verification cancelled successfully', 'success')
+        return redirect(url_for('home'))
+
+
 def send_confirmation_message(email):
     msg = Message('Approval  Email', sender='noreply@mosesomo.tech', recipients=[email])
     msg.body = f'Your voting account has been verified successfully.'
@@ -97,7 +111,7 @@ def ballot():
     if voting_period:
         if current_time > voting_period.end_time and not current_user.is_admin:
             flash(f'The voting period has ended. Closed at {voting_period.end_time}', 'danger')
-            return redirect(url_for('logout')) # Redirect back to  login page
+            return redirect(url_for('ballot_positions')) # Redirect back to  login page
         elif current_time < voting_period.start_time and not current_user.is_admin:
             flash(f'Voting is not currently open! Please wait until {voting_period.start_time}.\
                   for now you can view the ballot positions', 'danger')
@@ -224,8 +238,14 @@ def ballot_positions():
 @app.route('/dashboard/votes')
 @login_required
 def votes():
+    voting_period = VotingPeriod.query.first()
+    current_time = datetime.now()
     grouped_candidates = {}
     positions = Position.query.all()
+    
+    if current_time < voting_period.start_time and not current_user.is_admin:
+        flash('Can not acces this page, voting period not opened!', 'warning')
+        return redirect(url_for('ballot_positions'))
     
     for position in positions:
         candidates = Candidate.query.filter_by(position=position).all()
@@ -237,6 +257,12 @@ def votes():
 
 @app.route('/my_votes/<int:user_id>', methods=['GET', 'POST'])
 def my_votes(user_id):
+    voting_period = VotingPeriod.query.first()
+    current_time = datetime.now()
+    if current_time < voting_period.start_time and not current_user.is_admin:
+        flash('Can not acces this page, voting period not opened!', 'warning')
+        return redirect(url_for('ballot_positions'))
+    
     user = User.query.get_or_404(user_id)
     if user:
         ballots = BallotPosition.query.filter_by(user_id=current_user.id).all()
@@ -363,7 +389,8 @@ def edit_candidate(candidate_id):
     form = CandidateForm()
 
     if form.validate_on_submit():
-        position = Position.query.filter_by(position_name=form.position.data).first()
+        position_id = form.position.data
+        position = Position.query.get(position_id)
         
         if position:
             # Handle file upload
@@ -471,6 +498,12 @@ def editVotingPeriod():
 
 @app.route('/results')
 def results():
+    voting_period = VotingPeriod.query.first()
+    current_time = datetime.now()
+    if current_time < voting_period.start_time and not current_user.is_admin:
+        flash('Can not acces this page, voting period not opened!', 'warning')
+        return redirect(url_for('ballot_positions'))
+    
     candidates_with_max_votes, total_votes = get_candidates_with_highest_votes()
     return render_template('admin/results.html',
                            candidates_with_max_votes=candidates_with_max_votes,

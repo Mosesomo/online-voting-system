@@ -33,7 +33,7 @@ class RegistrationForm(FlaskForm):
     reg_no = StringField('Reg No.', validators=[DataRequired(),
                                                 Regexp(rf'^{department_pattern}-[0-9]{2}-[0-9]{4}/[0-9]{4}$',
                                                        message='Invalid Registration Number')],
-                         render_kw={"placeholder": "bscit-00-000/yr"})
+                         render_kw={"placeholder": "bscit-00-000/year", "style": "color: gray;font-weight: 400;"})
     student_id = FileField('Upload your Id', validators=[FileAllowed(photos, 'Only Images are allowed')])
     password = PasswordField("Password", validators=[DataRequired(), Length(min=8, max=16)],
                              render_kw={"Password": "Password"})
@@ -47,9 +47,9 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Email already exists!')
         
     def validate_reg_no(self, reg_no_field):
-        reg_no = User.query.filter_by(reg_no=reg_no_field.data)
+        reg_no = User.query.filter_by(reg_no=reg_no_field.data).first()
         if reg_no:
-            raise ValidationError('Reg No already exists!')
+            raise ValidationError('Reg No. already exists!')
         
     def validate_password(self, password_field):
         password = password_field.data
@@ -68,7 +68,8 @@ class CandidateForm(FlaskForm):
     first_name = StringField('First name', validators=[DataRequired()])
     last_name = StringField('Last name', validators=[DataRequired()])
     email = EmailField('Email', validators=[DataRequired()])
-    phone = StringField('Phone no.', validators=[DataRequired(), Regexp(r'^\+?\d+$', message='Invalid phone number')])
+    phone = StringField('Phone no.', validators=[DataRequired(),
+                                                 Regexp(r'^\+?\d+$', message='Invalid phone number')])
     bio = StringField('Biography')
     
     # Dynamically populate choices for the position field from the database

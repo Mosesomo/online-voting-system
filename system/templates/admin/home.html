@@ -77,7 +77,7 @@
                       {% if not voter.is_admin %}
                         <tr>
                           <td>{{voter.first_name}} {{voter.last_name}}</td>
-                          <td>{{voter.reg_no}}</td>
+                          <td style="">{{voter.reg_no.upper()}}</td>
                           <td><img src="{{voter.student_id}}" width="80" height="80"></td>
                           <td>{{voter.email}}</td>
                           <td>
@@ -92,12 +92,12 @@
                                 </form>
                             {% endif %}
                             <button type="button" class='btn btn-danger btn-sm delete btn-flat'
-                              data-bs-toggle="modal" data-bs-target="#exampleModal"><i
+                              data-bs-toggle="modal" data-bs-target="#exampleModal{{voter.id}}"><i
                                 class='fa fa-times'></i> Cancel</button>
                           </td>
                         </tr>
                           <!-- Modal -->
-                          <div class="modal fade" id="exampleModal" tabindex="-1"
+                          <div class="modal fade" id="exampleModal{{voter.id}}" tabindex="-1"
                             aria-labelledby="exampleModalLabel" aria-hidden="true">
                               <div class="modal-dialog">
                                 <div class="modal-content">
@@ -111,7 +111,7 @@
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <form action="" method="POST">
+                                    <form action="{{url_for('cancel_verification', user_id=voter.id)}}" method="POST">
                                       <input class="btn btn-danger" type="submit" value="Delete">
                                     </form>
                                   </div>

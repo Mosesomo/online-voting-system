@@ -22,7 +22,7 @@
                       <td>{{ voter.id }}</td>
                       <td>{{ voter.first_name }}</td>
                       <td>{{ voter.last_name }}</td>
-                      <td>{{ voter.reg_no }}</td>
+                      <td>{{ voter.reg_no.upper() }}</td>
                       <td>{{ voter.email }}</td>
                       <td>
                         <button class='btn {{"btn-primary" if voter.is_approved else "btn-warning"}} btn-sm edit btn-flat rounded text-light'>

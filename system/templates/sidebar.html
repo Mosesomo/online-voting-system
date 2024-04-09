@@ -36,8 +36,8 @@
         {% else %}
           <li class="header">REPORTS</li>
           <li class=""><a href="{{url_for('votes')}}"><i class="fa fa-edit"></i><span>Votes</span></a></li>
-          <li class=""><a href="{{url_for('ballot_positions')}}"><i class="fa fa-file-text"></i> <span>Ballot Position</span></a></li>
-          <li class=""><a href="{{url_for('results')}}"><i class="fa-solid fa-square-poll-horizontal"></i>  <span>Results</span></a></li>
+          <li class=""><a href="{{url_for('ballot_positions')}}"><i class="fa fa-file-text"></i><span>Ballot Position</span></a></li>
+          <li class=""><a href="{{url_for('results')}}"><i class="fa-solid fa-square-poll-horizontal"></i> <span>Results</span></a></li>
           <li class=""><a href="{{url_for('my_votes', user_id=current_user.id)}}"><i class="fa-solid fa-square-poll-horizontal"></i>  <span>My Votes</span></a></li>
           <li class="header">EXIT</li>
           <li class=""><a href="{{url_for('logout')}}"><i class="fa fa-power-off"></i> <span>Logout</span></a></li>

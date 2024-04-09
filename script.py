@@ -1,3 +1,4 @@
+'''This script is used for managing our database'''
 from system import app, db, bcrypt
 from system.model import User, Candidate, Position, BallotPosition, VotingPeriod
 from datetime import datetime
@@ -162,6 +163,9 @@ with app.app_context():
     # db.session.delete(users)
     
     # db.session.delete(User.query.get(3))
+    
+    # vote = BallotPosition.query.get(1)
+    # db.session.delete(vote)
     
     db.session.commit() # Use db.session.commit()
     
