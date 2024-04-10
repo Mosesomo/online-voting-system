@@ -30,7 +30,7 @@ def login_home():
             login_user(user)
             return redirect(url_for('ballot'))
         else:
-            flash('Login Unsuccessful, please check email or password', 'danger')
+            flash('Login Unsuccessful, please check reg no. or password', 'danger')
     return render_template('login.html', form=form)
 
 
@@ -57,7 +57,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash(f'Welcome {user.first_name}, your voting account has been registered successfully.\
-            An email will be sent to you if your are verified.', 'success')
+            wait for your account to be verified.', 'success')
         
         return redirect(url_for('login_home'))
     return render_template('register.html', form=form)
